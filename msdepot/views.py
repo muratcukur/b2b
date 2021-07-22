@@ -26,6 +26,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.utils import ChromeType
 # Create your views here.
 
 
@@ -218,8 +219,6 @@ def scrap(request):
     data_migros = None
     data_şok = None
 
-
-
     rakipFiyatTakip = RakipFiyatTakip.objects.all()
 
     fruits = ["elma starking", "elma golden", "elma granny", "muz yerli", "kıvırcık", "erik angelica", "erik papaz", "patates", "soğan"]
@@ -240,7 +239,7 @@ def scrap(request):
             #driver = webdriver.Chrome(url, options=options)
             opts = webdriver.ChromeOptions()
             opts.headless =True
-            driver = webdriver.Chrome(ChromeDriverManager().install() ,options=opts )
+            driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.GOOGLE).install() ,options=opts )
             driver.get("https://www.migros.com.tr/")
             time.sleep(3)
             try: 
@@ -309,7 +308,7 @@ def scrap(request):
             #driver = webdriver.Chrome(url, options=options)
             opts = webdriver.ChromeOptions()
             opts.headless =True
-            driver = webdriver.Chrome(ChromeDriverManager().install(), options=opts)
+            driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.GOOGLE).install(), options=opts)
             driver.get("https://www.sokmarket.com.tr/")
             search_bar = driver.find_element_by_name('search')
             search_bar.clear()
