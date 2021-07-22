@@ -23,6 +23,9 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import os
 from django.contrib.staticfiles.storage import staticfiles_storage
+
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 # Create your views here.
 
 
@@ -215,6 +218,8 @@ def scrap(request):
     data_migros = None
     data_şok = None
 
+
+
     rakipFiyatTakip = RakipFiyatTakip.objects.all()
 
     fruits = ["elma starking", "elma golden", "elma granny", "muz yerli", "kıvırcık", "erik angelica", "erik papaz", "patates", "soğan"]
@@ -228,11 +233,14 @@ def scrap(request):
         meyve_fiyat_migros['İndirimde mi?'] = {}
 
         for fruit in fruits:
-            options = Options()
-            options.headless = True
-            options.add_argument("--window-size=1920,1080")
-            url = staticfiles_storage.path('chromedriver.exe')
-            driver = webdriver.Chrome(url, options=options)
+            #options = Options()
+            #options.headless = True
+            #options.add_argument("--window-size=1920,1080")
+            #url = staticfiles_storage.path('chromedriver.exe')
+            #driver = webdriver.Chrome(url, options=options)
+            opts = webdriver.ChromeOptions()
+            opts.headless =True
+            driver = webdriver.Chrome(ChromeDriverManager().install() ,options=opts )
             driver.get("https://www.migros.com.tr/")
             time.sleep(3)
             try: 
@@ -251,8 +259,8 @@ def scrap(request):
             search_bar.send_keys(fruit)
             search_bar.send_keys(Keys.RETURN)
             time.sleep(2)
-            isim = driver.find_element_by_class_name('product-name').text
             try:
+                isim = driver.find_element_by_class_name('product-name').text
                 elements=WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, '.product-cards > .ng-star-inserted')))
                 old_fiyat = elements[0].find_element_by_css_selector(".price-old .amount").text
                 new_fiyat = elements[0].find_element_by_css_selector(".price-new .amount").text
@@ -260,6 +268,7 @@ def scrap(request):
                 meyve_fiyat_migros['Fiyat'][isim] = fiyat
                 meyve_fiyat_migros['İndirimde mi?'][isim] = "evet"
             except:
+                isim = driver.find_element_by_class_name('product-name').text
                 fiyat = driver.find_element_by_class_name('amount').text
                 meyve_fiyat_migros['Fiyat'][isim] = fiyat
                 meyve_fiyat_migros['İndirimde mi?'][isim] = "hayır"
@@ -290,12 +299,17 @@ def scrap(request):
         meyve_fiyat_şok['Fiyat'] = {}
         meyve_fiyat_şok['İndirimde mi?'] = {}
 
+        fruits = ["elma", "patates", "soğan", "muz"]
+
         for fruit in fruits:
-            options = Options()
-            options.headless = True
-            options.add_argument("--window-size=1920,1080")
-            url = staticfiles_storage.path('chromedriver.exe')
-            driver = webdriver.Chrome(url, options=options)
+            #options = Options()
+            #options.headless = True
+            #options.add_argument("--window-size=1920,1080")
+            #url = staticfiles_storage.path('chromedriver.exe')
+            #driver = webdriver.Chrome(url, options=options)
+            opts = webdriver.ChromeOptions()
+            opts.headless =True
+            driver = webdriver.Chrome(ChromeDriverManager().install(), options=opts)
             driver.get("https://www.sokmarket.com.tr/")
             search_bar = driver.find_element_by_name('search')
             search_bar.clear()
