@@ -1,0 +1,68 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}view ihale {% endblock title %}
+
+{% block content %}
+
+{% url 'msdepot:detail_ihale_view' as path_to_detail_ihale_view %}
+<br>
+<br>
+<br>
+<br>
+
+<table class="ui celled table" id="ihale" style="width:100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Meyve Sebze</th>
+            <th>Adet</th>
+            <th>Birim</th> 
+            <th>Kasa Ebatı</th>
+            <th>Paletteki Kasa Sayısı</th>
+            <th>Palet Ölçüsü</th>
+            <th>Spekt Açıklama</th>
+            <th>Sevk Koşulları</th>
+            <th>Koli Koşulları</th>
+            <th>Hedef Birim Fiyat</th>
+            <th>Teslim Tarihi</th>
+            <th>İhale Kapanış Tarihi</th>
+            <th>Kalan Süre</th>
+            <th>Detaya Git</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ihale in ihales%}
+        <tr>
+            <td>{{ihale.id}}</td>
+            <td>{{ihale.fruit_vegetable_name}}</td>
+            <td>{{ihale.quantity}}</td>
+            <td>{{ihale.unit}}</td>
+            <td>{{ihale.kasa_ebati}}</td>
+            <td>{{ihale.paletteki_kasa_sayisi}}</td>
+            <td>{{ihale.palet_olcusu}}</td>
+            <td>{{ihale.spekt_aciklama}}</td>
+            <td>{{ihale.sevk_kosullari}}</td>
+            <td>{{ihale.koli_kosullari}}</td>
+            <td>{{ihale.hedef_fiyat}}</td>
+            <td>{{ihale.teslim_tarihi|date:"d-m-Y"}}</td>
+            <td>{{ihale.ihale_end_date|date:"d-m-Y"}}</td>
+            <td>{{ihale.ihale_end_date|timeuntil:today}}</td>
+            <td><a href="{% url 'msdepot:detail_ihale_view' ihale.id  %}"><button class="ui green button" style="width: 40px;">İhale Detayı</button></a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+
+    var table = $('#ihale').DataTable( {
+        lengthChange: false,
+        buttons: [ 'excel', 'pdf', 'colvis' ]
+    } );
+ 
+    table.buttons().container()
+        .appendTo( $('div.eight.column:eq(0)', table.table().container()) );
+
+</script>
+
+{% endblock content %}

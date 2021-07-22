@@ -1,0 +1,49 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}view depot order{% endblock title %}
+
+{% block content %}
+
+<br>
+<br>
+<br>
+<br>
+<table class="ui celled table" id="depotOrder" style="width:100%">
+    <thead>
+        <tr>
+            <th>Depo Adı</th>
+            <th>Meyve Sebze</th>
+            <th>Palet</th>
+            <th>Birim</th>
+            <th>Teslim Tarihi</th>
+            <th>Eklendiği Tarih</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in depotOrder%}
+        <tr>
+            <td>{{order.depot_name}}</td>
+            <td>{{order.fruit_vegetable_name}}</td>
+            <td>{{order.palet}}</td>
+            <td>{{order.unit}}</td>
+            <td>{{order.teslim_tarihi|date:"Y-m-d"}}</td>
+            <td>{{order.order_date|date:"Y-m-d"}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<script>
+
+    var table = $('#depotOrder').DataTable( {
+        lengthChange: false,
+        buttons: [ 'excel', 'pdf', 'colvis' ]
+    } );
+ 
+    table.buttons().container()
+        .appendTo( $('div.eight.column:eq(0)', table.table().container()) );
+
+</script>
+
+{% endblock content %}

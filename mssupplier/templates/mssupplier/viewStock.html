@@ -1,0 +1,40 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}view depot order{% endblock title %}
+
+{% block content %}
+
+<br>
+<br>
+<br>
+<br>
+<table class="ui celled table" id="supplierStock" style="width:100%">
+    <thead>
+        <tr>
+            <th>Tedarikci</th>
+            <th>Meyve Sebze</th>
+        <!--     <th>Güncel Stok</th>
+            <th>Birim</th>
+            <th>Yıllık Satış Kapasitesi</th>
+            <th>Birim</th>
+            <th>Açıklama</th> -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for stock in stocks%}
+        <tr>
+            <td>{{stock.supplier_name}}</td>
+            <td>{{stock.fruit_vegetable_name}}</td>
+            <!--  <td>{{stock.current_stock}}</td>
+            <td>{{stock.current_unit}}</td>
+            <td>{{stock.yearly_sales_capacity}}</td>
+            <td>{{stock.yearly_unit}}</td>
+            <td>{{stock.explanation}}</td>  -->
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+{% endblock content %}

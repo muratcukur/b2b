@@ -1,0 +1,316 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}view depot order{% endblock title %}
+
+{% block content %}
+
+<br>
+<br>
+<br>
+<br>
+<div class="ui modal orderEditModal">
+    <i class="close icon" style="color:red; font-size : 40px;"></i>
+    <div class="header" style="text-align: center;">
+        SİPARİŞİ DÜZENLE
+    </div>
+    <form action="" method="POST" class="ui form" id="orderEdit">
+        <input type="hidden" class="form-control" id="form-id">
+
+        <tr><th><label for="id_quantity">Miktar:</label></th><td>
+            <input type="number" name="quantity" required id="id_quantity"></td></tr>
+<tr><th><label for="id_unit">Birim:</label></th><td>
+    <select name="unit" required id="id_unit">
+  <option value="">---------</option>
+
+  <option value="Adet" >Adet</option>
+
+  <option value="Kilo">Kilo</option>
+
+</select></td></tr>
+<tr><th><label for="id_price">Birim Fiyatı:</label></th><td>
+    <input type="number" name="price"  step="any" required id="id_price"></td></tr>
+<tr><th><label for="id_destination">Gideceği Adresi Tipi:</label></th><td>
+    <select name="destination" required id="id_destination">
+  <option value="">---------</option>
+
+  <option value="MsDepo">MsDepo</option>
+
+  <option value="Bölge" >Bölge</option>
+
+</select></td></tr>
+<tr><th><label for="id_destination_bolge">Gideceği Bölge Adı:</label></th><td>
+
+    <select name="destination_bolge" required id="id_destination_bolge">
+  <option value="">---------</option>
+
+  <option value="serik">serik</option>
+
+  <option value="lüleburgaz">lüleburgaz</option>
+
+  <option value="sakarya">sakarya</option>
+
+</select></td></tr>
+
+<tr><th><label for="id_termin">İstenen Tarih:</label></th><td>
+<input type="date" name="termin" class="form-control" placeholder="Tarih Seçiniz" required id="id_termin"></td></tr>
+
+<tr><th><label for="id_slot">Saat Aralığı:</label></th><td>
+    <select name="slot" required id="id_slot">
+  <option value="">---------</option>
+
+  <option value="07:00-12:00">07:00-12:00</option>
+
+  <option value="12:00-19:00">12:00-19:00</option>
+
+</select></td></tr>
+<tr><th><label for="id_approved">Onaylandı mı:</label></th><td>
+    <input type="checkbox" name="approved" id="id_approved"></td></tr>
+  
+<button type="submit" class="ui positive button">Sipariş Düzenle</button>
+        
+    </form>
+</div>
+
+
+
+
+<table class="ui celled table table-order" id="supplierStock" style="width:100%">
+    <thead>
+        <tr>
+            <th>Meyve Sebze</th>
+            <th>Adet</th>
+            <th>Birim</th>
+            <th>Birim Fiyat</th>
+            <th>Gidilecek Depo</th>
+            <th>Gidilecek Bölge</th>
+            <th>Termin</th>
+            <th>Zaman Aralığı</th>
+            <th>Onay Durumu</th>
+            <th>Onayla</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders%}
+        <tr id="order-{{order.id}}">
+            <td class="orderProduct orderData" name="Product">{{order.product}}</td>
+            <td class="orderQuantity orderData" name="Quantity">{{order.quantity}}</td>
+            <td class="orderUnit orderData" name="Unit">{{order.unit}}</td>
+            <td class="orderPrice orderData" name="Prşce">{{order.price}}</td>
+            <td class="orderDestination orderData" name="Destination">{{order.destination}}</td>
+            <td class="orderDestinationBolge orderData" name="DestinationBolge">{{order.destination_bolge}}</td>
+            <td class="orderTermin orderData" name="Termin">{{order.termin|date:"d-m-Y"}}</td>
+            <td class="orderSlot orderData" name="Slot">{{order.slot}}</td>
+            <td class="orderApproved orderData" name="Approved">{{order.approved|yesno:"Evet,Hayır"}}</td>
+      <!--  <td> <a href="{% url 'mssupplier:edit_order_view' order.id  %}"><button class="ui green button">Onayla</button></a></td>  AJAX OLMADAN  -->
+            <td><button class="ui green button" onclick="editOrder({{order.id}})">Onayla</button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<script>
+function editOrder(id) {
+
+    $('#form-id').val(id);
+
+    if (id) {
+        tr_id = "#order-" + id;
+        quantity = $(tr_id).find(".orderQuantity").text();
+        unit = $(tr_id).find(".orderUnit").text();
+        price = $(tr_id).find(".orderPrice").text();
+        destination = $(tr_id).find(".orderDestination").text();
+        destination_bolge = $(tr_id).find(".orderDestinationBolge").text();
+        termin = $(tr_id).find(".orderTermin").text();
+
+        day = termin.slice(0, 2)
+        month = termin.slice(3, 5)
+        year = termin.slice(6, 10)
+
+        slot = $(tr_id).find(".orderSlot").text();
+        approved = $(tr_id).find(".orderApproved").text();
+
+        var date_termin = (year)+"-"+(month)+"-"+(day) ;
+
+        $('#id_quantity').val(quantity);
+        $('#id_unit').val(unit);
+        $('#id_price').val(price);
+        $('#id_destination').val(destination);
+        $('#id_destination_bolge').val(destination_bolge);
+        $('#id_termin').val(date_termin);
+        $('#id_slot').val(slot);
+
+        if (approved == "Evet") {
+            $('#id_approved').prop("checked", true);
+        }
+        else {
+            $('#id_approved').prop("checked", false);
+        }
+      }
+
+      $('.orderEditModal').modal('show')
+      
+    }
+</script>
+
+
+<script type="text/javascript">
+    
+    $(function() { 
+
+    // AJAX CALL
+    $('#orderEdit').on('submit', function(event){
+        event.preventDefault();
+        console.log("form submitted!") ; // sanity check
+
+        update_order();
+    });
+
+      
+      
+function update_order() {
+
+    var id = $('#form-id').val();
+    formData = new FormData($('#orderEdit').get(0));
+
+    formData.append('id', id);
+    console.log(formData);
+
+
+      $.ajax({
+          url : '{% url 'mssupplier:ajax_edit_order_view' %}', // the endpoint
+          type : "POST", // http method
+          data : formData,
+
+          cache: false,
+          processData: false,
+          contentType: false,
+  
+          // handle a successful response
+          success: function(json) {
+          console.log("success"); // another sanity check
+          console.log(json); // log the returned json to the console
+          
+          var instance = JSON.parse(json["instance"]);
+          var fields = instance[0]["fields"];
+          approved = fields["approved"]
+
+          console.log(approved)
+
+          $('.orderEditModal')
+          .modal('hide');
+
+        // AJAX ile güncellenmiş satırı ekrana yazdır.
+          if (approved ==true) {
+            $(".ui.table-order #order-"+id).children(".orderData").each(function() {
+                var attr = $(this).attr("name");
+                if (attr == "Approved"){
+                  $(this).text("Evet")
+                }
+            });
+        }
+        else {
+            $(".ui.table-order #order-"+id).children(".orderData").each(function() {
+                var attr = $(this).attr("name");
+                if (attr == "Approved"){
+                  $(this).text("Hayır")
+                }
+            });
+        }
+
+    },
+  
+          // handle a non-successful response
+          error: function(xhr, errmsg, err) {
+          $('#results').html("<div class='ui red message' data-alert>Oops! We have encountered an error: "+errmsg+
+                  " <i class='close icon'></i></div>"); // add the error to the dom
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+          },
+  
+          
+      });
+
+};
+
+
+    // This function gets cookie with a given name
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    /*
+    The functions below will create a header with csrftoken
+    */
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    function sameOrigin(url) {
+        // test that a given url is a same-origin URL
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                // Send the token to same-origin, relative URLs only.
+                // Send the token only if the method warrants CSRF protection
+                // Using the CSRFToken value acquired earlier
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+
+});
+</script>
+
+
+<script>
+ // sadece onaylandı mı checkbox ı göster
+    document.getElementById("id_quantity").style.display = "none";
+    document.getElementById("id_unit").style.display = "none";
+    document.getElementById("id_price").style.display = "none";
+    document.getElementById("id_destination").style.display = "none";
+    document.getElementById("id_destination_bolge").style.display = "none";
+    document.getElementById("id_termin").style.display = "none";
+    document.getElementById("id_slot").style.display = "none";
+
+
+</script>
+
+<style>
+    [for="id_quantity"] { display: none;}
+    [for="id_unit"] { display: none;}
+    [for="id_price"] { display: none;}
+    [for="id_destination"] { display: none;}
+    [for="id_destination_bolge"] { display: none;}
+    [for="id_termin"] { display: none;}
+    [for="id_slot"] { display: none;}
+
+</style>
+
+{% endblock content %}

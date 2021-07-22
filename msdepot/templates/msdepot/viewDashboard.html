@@ -1,0 +1,34 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}view dashboard {% endblock title %}
+
+{% block content %}
+
+<br>
+<br>
+<br>
+<br>
+
+{% if graph_bolgesel_gelen_siparis %}
+{{ graph_bolgesel_gelen_siparis|safe }}
+{% else %}
+<p>No graph was provided</p>
+{% endif %}
+
+
+{% if graph_ihale_kazananlar %}
+{{ graph_ihale_kazananlar|safe }}
+{% else %}
+<p>No graph was provided</p>
+{% endif %}
+
+
+{% if graph_ms_firma_sayilari %}
+{{ graph_ms_firma_sayilari|safe }}
+{% else %}
+<p>No graph was provided</p>
+{% endif %}
+
+
+{% endblock content %}
+

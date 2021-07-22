@@ -1,0 +1,79 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}view ihale {% endblock title %}
+
+{% block content %}
+
+{% url 'msdepot:detail_ihale_view' as path_to_detail_ihale_view %}
+{% load filter_baglantili_ihale %}
+<br>
+<br>
+<br>
+<br>
+
+<table class="ui celled table" id="ihale" style="width:100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Meyve Sebze</th>
+            <th>Ürün İçerikleri Standartları</th>
+            <th>Koli İçeriği</th>
+            <th>Palet İçeriği</th>
+            <th>Ambalaj Maddesi</th>
+            <th>Sabit Fiyat Garantisi</th>
+            <th>Raf Ömrü</th>
+            <th>Tat Testi Sonucu</th>
+            <th>Tavsiye</th>
+            <th>Karar</th>
+            <th>Yorum</th>
+            <th>İhale Bitiş Tarihi</th>
+            <th>Ay - Hedef Tonaj - Hedef Fiyat</th>
+            <th>Detaya Git</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ihale in ihales%}
+        <tr>
+            <td>{{ihale.id}}</td>
+            <td>{{ihale.fruit_vegetable_name}}</td>
+            <td>{{ihale.urun_icerikleri_standartlari}}</td>
+            <td>{{ihale.koli_icerigi}}</td>
+            <td>{{ihale.palet_icerigi}}</td>
+            <td>{{ihale.ambalaj_maddesi}}</td>
+            <td>{{ihale.sabit_fiyat_garantisi}}</td>
+            <td>{{ihale.raf_omru}}</td>
+            <td>{{ihale.tat_testi_sonucu}}</td>
+            <td>{{ihale.tavsiye}}</td>
+            <td>{{ihale.karar}}</td>
+            <td>{{ihale.yorum}}</td>
+            <td>{{ihale.ihale_end_date|date:"d-m-Y"}}</td>
+            <td>
+                <table class="ui celled table">
+                    {% for ay_tonaj in ay_hedef_tonaj|in_category:ihale.id %}  
+                    <tr>
+                    <td>{{ay_tonaj.month}}</td>
+                    <td>{{ay_tonaj.planlanan_hedef_tonaj}}</td>
+                    <td>{{ay_tonaj.planlanan_hedef_fiyat}}</td>
+                    </tr>
+                        {% endfor %}
+                </table>
+            </td>
+            <td><a href="{% url 'msdepot:detail_baglantili_ihale_view' ihale.id  %}"><button class="ui green button" style="width: 40px;">Bağlantılı İhale Detayı</button></a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+
+    var table = $('#ihale').DataTable( {
+        lengthChange: false,
+        buttons: [ 'excel', 'pdf', 'colvis' ]
+    } );
+ 
+    table.buttons().container()
+        .appendTo( $('div.eight.column:eq(0)', table.table().container()) );
+
+</script>
+
+{% endblock content %}

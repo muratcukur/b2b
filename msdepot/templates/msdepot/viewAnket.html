@@ -1,0 +1,53 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}view ihale {% endblock title %}
+
+{% block content %}
+
+<br>
+<br>
+<br>
+<br>
+
+<table class="ui celled table" id="anket" style="width:100%">
+    <thead>
+        <tr>
+            <th>Yıl</th>
+            <th>Ay</th>
+            <th>Tedarikçi</th>
+            <th>Bulunurluk</th>
+            <th>Tazelik</th>
+            <th>Temizlik</th>
+            <th>Düzen</th>
+            <th>Personel Kişisel Bakım</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for anket in ankets %}
+        <tr>
+            <td>{{anket.year}}</td>
+            <td>{{anket.month}}</td>
+            <td>{{anket.supplier}}</td>
+            <td>{{anket.bulunurluk}}</td>
+            <td>{{anket.tazelik}}</td>
+            <td>{{anket.temizlik}}</td>
+            <td>{{anket.duzen}}</td>
+            <td>{{anket.personel_kisisel_bakimi}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+
+    var table = $('#anket').DataTable( {
+        lengthChange: false,
+        buttons: [ 'excel', 'pdf', 'colvis' ]
+    } );
+ 
+    table.buttons().container()
+        .appendTo( $('div.eight.column:eq(0)', table.table().container()) );
+
+</script>
+
+{% endblock content %}

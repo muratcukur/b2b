@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}tedarikçi platformu{% endblock title %}
+
+{% block content %}
+
+{% url 'msdepot:ihale_view' as path_to_ihale_view %}
+
+{% include 'sidenavbar.html' %}
+
+<!--  <img src={% static 'meyve_sebze.jpg' %} class="ui fluid image" > -->
+</div>
+
+
+{% endblock content %}

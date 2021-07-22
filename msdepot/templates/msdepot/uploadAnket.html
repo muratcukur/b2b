@@ -1,0 +1,25 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}upload anket{% endblock title %}
+
+{% block content %}
+
+
+<div class="block-center">
+	<div class="ui centered grid container">
+	<div class="ten wide column">
+<form action="" method="POST"  class="ui form topmargin">
+    {% csrf_token %}
+    <table>
+    {{form.as_table}}
+    </table>
+    <button type="submit" class="ui positive button">Anket Ekle</button>
+
+</form>
+
+</div>
+</div>
+</div>
+
+
+{% endblock content %}

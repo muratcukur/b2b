@@ -1,0 +1,60 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}view dashboard {% endblock title %}
+
+{% block content %}
+
+<br>
+<br>
+<br>
+<br>
+
+
+<form action="" method="POST"  class="ui form">
+    {% csrf_token %}
+    <button type="submit" class="ui  right floated positive button">Güncel Fiyatları Çek</button>
+</form>
+
+<br>
+<br>
+<br>
+<br>
+
+
+<table class="ui celled table" id="rakipFiyat" style="width:100%">
+    <thead>
+        <tr>
+            <th>Meyve Sebze</th>
+            <th>Fiyat</th>
+            <th>Mağaza</th>
+            <th>İndirimde mi?</th>
+            <th>Güncelleme Tarihi</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for kayit in rakipFiyatTakip%}
+        <tr>
+            <td>{{kayit.fruit_vegetable_name}}</td>
+            <td>{{kayit.price}}</td>
+            <td>{{kayit.rakip}}</td>
+            <td>{{kayit.indirim}}</td>
+            <td>{{kayit.date|date:"d-m-Y h:m:s"}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+
+    var table = $('#rakipFiyat').DataTable( {
+        lengthChange: true,
+        buttons: [ 'excel', 'pdf', 'colvis' ]
+    } );
+ 
+    table.buttons().container()
+        .appendTo( $('div.eight.column:eq(0)', table.table().container()) );
+
+</script>
+
+{% endblock content %}
+

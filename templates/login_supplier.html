@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}login{% endblock title %}
+
+{% block content %}
+
+<style type="text/css">
+    body {
+      background-color: #DADADA;
+    }
+    body > .grid {
+      height: 100%;
+    }
+    .image {
+      margin-top: -100px;
+    }
+    .column {
+      max-width: 450px;
+    }
+
+	.panel {
+		position: relative;
+		display: inline-block;
+		width: 262px;
+		height: 328px;
+		z-index: 1;
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-color: rgba(255, 255, 255, 0.5);
+		border-radius: 6px;
+		margin-top: 150px;
+	}
+
+	.panel-logo {
+		margin-top: 10px;
+		margin-left: 24px;
+		margin-right: 24px;
+		width: 224px;
+		height: 140px;
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-image: url('{% static 'LOGO.png' %}');
+		background-size: 100px 100px;
+	}
+
+  </style>
+
+  <div class="block-center">
+	<div class="ui centered grid container">
+	<div class="nine wide column">
+	{% if error_message %}
+		<div class="ui negative message" style="margin-top: 70px;">
+		  <i class="close icon"></i>
+		  	<div class="header">
+		    	{{error_message}}
+		  	</div>
+		</div>
+	{% endif %}
+
+<div class="panel">
+	<div class="panel-logo"></div>
+		<form action="" method="POST" class="ui form" style="margin-top: 10px;">
+			
+			{% csrf_token %}
+		
+		<table>
+			{{ form.as_table }}
+		</table>
+
+			<button type="submit" class="ui button positive mtop">Login</button>
+		</form>
+	
+	</div>
+
+</div>
+</div>
+</div>
+
+
+<script>
+
+	document.getElementById("id_username").placeholder = "Kullanıcı Adınız : ";
+	document.getElementById("id_password").placeholder = "Parolanız : ";
+
+</script>
+
+	
+{% endblock content %}

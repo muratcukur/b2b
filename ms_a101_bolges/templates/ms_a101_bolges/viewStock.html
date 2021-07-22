@@ -1,0 +1,225 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}view supplier stock{% endblock title %}
+
+{% block content %}
+
+<br>
+<br>
+<br>
+<br>
+<style>
+
+    label[for=id_approved] {
+        display : none;
+    }
+
+    #id_approved {
+        display : none;
+    }
+
+</style>
+<div class="ui modal orderModal">
+    <i class="close icon" style="color:red; font-size:  40px;"></i>
+    <div class="header" style="text-align: center">
+      SİPARİŞ EKLEYİNİZ
+    </div>
+  
+    <form action="" method = "POST" class="ui form" id="siparisEkle">
+        {% csrf_token %}
+        <table>
+        {{ form.as_table }}
+        </table>
+        <button type="submit" name="order_sub"  class="ui positive button" style="margin-top: 10px; float: right;">Sipariş Ekle</button>
+    </form>
+  
+  </div>
+<!-- 
+
+{% for unique_f in unique_fruit_vegetable%}
+<h1>{{unique_f.fruit_vegetable_name}}</h1>
+<table class="ui celled table" id="supplierStock{{unique_f.fruit_vegetable_name}}" style="width:100%">
+    <thead>
+        <tr>
+            <th>Tedarikci</th>
+            <th>Meyve Sebze</th>
+            <th>Güncel Stok</th>
+            <th>Birim</th>
+            <th>Yıllık Satış Kapasitesi</th>
+            <th>Birim</th>
+            <th>Açıklama</th>
+            <th>Sipariş Ver</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stock in stocks%}
+        {% if stock.fruit_vegetable_name == unique_f.fruit_vegetable_name %}
+        <tr>
+            <td>{{stock.supplier_name}}</td>
+            <td>{{stock.fruit_vegetable_name}}</td>
+            <td>{{stock.current_stock}}</td>
+            <td>{{stock.current_unit}}</td>
+            <td>{{stock.yearly_sales_capacity}}</td>
+            <td>{{stock.yearly_unit}}</td>
+            <td>{{stock.explanation}}</td>
+            <td><button class="ui green button" onclick="addOrder()">Sipariş Ver</button></td>          
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endfor %}
+
+
+{% for unique_f in unique_fruit_vegetable%}
+<script>
+    $('#supplierStock{{unique_f.fruit_vegetable_name}}')
+    .DataTable({    
+    });
+</script>
+{% endfor %}
+-->
+<div id="results"></div> <!-- errors go here -->
+<form action="" method = "POST" class="ui form" id="searchFruitVegetable">
+    {% csrf_token %}
+    {{ form_search }}
+    <button type="submit" name="search_fruit_vegetable_sub" class="ui red button" style="margin-top: 10px; margin-bottom: 10px; float: left;">Meyve Sebze Ara</button>
+</form>
+
+<table class="ui celled table" id="supplierStock{{unique_f.fruit_vegetable_name}}" style="width:100%">
+    <thead>
+        <tr>
+            <th>Tedarikci</th>
+            <th>Meyve Sebze</th>
+         <!--   <th>Güncel Stok</th>
+            <th>Birim</th>
+            <th>Yıllık Satış Kapasitesi</th>
+            <th>Birim</th>
+            <th>Açıklama</th>-->
+            <th>Sipariş Ver</th>
+          <!--  <th>Toplantı Düzenle</th> -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for stock in search_stocks%}
+        <tr>
+            <td class="supplier_name">{{stock.supplier_name}}</td>
+            <td class="fruit_vegetable">{{stock.fruit_vegetable_name}}</td>
+          <!--  <td>{{stock.current_stock}}</td>
+            <td>{{stock.current_unit}}</td>
+            <td>{{stock.yearly_sales_capacity}}</td>
+            <td>{{stock.yearly_unit}}</td>
+            <td>{{stock.explanation}}</td> -->
+            <td><button type="button" class="ui green button siparisVer">Sipariş Ver</button></td>
+          <!--  <td><a href=""><i class="tty icon" style="margin-left:30px;"></i></a></td>      -->      
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<script>
+    $(function() {
+    globals = {};
+
+    $(".siparisVer").on("click", function() {
+        var supplier_name = $(this).closest('tr').find('.supplier_name').text();
+        var fruit_vegetable = $(this).closest('tr').find('.fruit_vegetable').text();
+    $('.orderModal')
+      .modal('show');
+
+      globals['supplier_name'] =supplier_name
+      globals['fruit_vegetable'] =fruit_vegetable
+
+      });
+
+      // AJAX CALL
+      $('#siparisEkle').on('submit', function(event){
+          event.preventDefault();
+          console.log("form submitted!")  // sanity check
+          
+        formData = $('#siparisEkle').serializeArray();
+        formData.push({ name: "supplier_name", value: globals['supplier_name'] });
+        formData.push({ name: "fruit_vegetable", value: globals['fruit_vegetable'] });
+    
+        console.log(formData)
+        
+        $.ajax({
+            url : '{% url 'ms_a101_bolges:stock_view' %}', // the endpoint
+            type : "POST", // http method
+            data : formData,
+    
+            // handle a successful response
+            success: function(json) {
+            console.log("success"); // another sanity check
+            console.log(json); // log the returned json to the console
+            $('.orderModal')
+                .modal('hide');
+            },
+    
+            // handle a non-successful response
+            error: function(xhr, errmsg, err) {
+            $('#results').html("<div class='ui red message' data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <i class='close icon'></i></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            },
+    
+            
+        });
+ 
+    });
+
+      // This function gets cookie with a given name
+      function getCookie(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie != '') {
+              var cookies = document.cookie.split(';');
+              for (var i = 0; i < cookies.length; i++) {
+                  var cookie = jQuery.trim(cookies[i]);
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
+      var csrftoken = getCookie('csrftoken');
+  
+      /*
+      The functions below will create a header with csrftoken
+      */
+  
+      function csrfSafeMethod(method) {
+          // these HTTP methods do not require CSRF protection
+          return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+      function sameOrigin(url) {
+          // test that a given url is a same-origin URL
+          // url could be relative or scheme relative or absolute
+          var host = document.location.host; // host + port
+          var protocol = document.location.protocol;
+          var sr_origin = '//' + host;
+          var origin = protocol + sr_origin;
+          // Allow absolute or scheme relative URLs to same origin
+          return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+              (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+              // or any other URL that isn't scheme relative or absolute i.e relative.
+              !(/^(\/\/|http:|https:).*/.test(url));
+      }
+  
+      $.ajaxSetup({
+          beforeSend: function(xhr, settings) {
+              if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                  // Send the token to same-origin, relative URLs only.
+                  // Send the token only if the method warrants CSRF protection
+                  // Using the CSRFToken value acquired earlier
+                  xhr.setRequestHeader("X-CSRFToken", csrftoken);
+              }
+          }
+      });
+
+    });
+
+</script>
+
+{% endblock content %}

@@ -1,0 +1,103 @@
+{% url 'ms_a101_bolges:upload_depotOrder_view' as path_to_upload_depotOrder %}
+{% url 'ms_a101_bolges:depotOrder_view' as path_to_view_depotOrder %}
+{% url 'ms_a101_bolges:depotOrder_view_depot_based' as path_to_list_depotOrder_depot_based %}
+{% url 'ms_a101_bolges:stock_view' as path_to_view_supplier_stock_depot_based %}
+{% url 'msdepot:upload_ihale_view' as path_to_upload_ihale %}
+{% url 'msdepot:ihale_view' as path_to_view_ihale %}
+{% url 'msdepot:dashboard_view' as path_to_view_msdepot_dashboard %}
+{% url 'msdepot:stock_view' as path_to_view_msdepot_stock %}
+{% url 'msdepot:scrap' as path_to_view_rakip_fiyat %}
+{% url 'msdepot:upload_anket_view' as path_to_upload_anket_view %}
+{% url 'msdepot:list_anket_view' as path_to_list_anket_view %}
+{% url 'msdepot:list_ikinci_tur_view' as path_to_list_ikinci_tur_view %}
+{% url 'msdepot:list_ikinci_tur_supplier_based_view' as path_to_list_ikinci_tur_supplier_based_view %}
+{% url 'msdepot:upload_baglantili_ihale_view' as path_to_upload_baglantili_ihale_view %}
+{% url 'msdepot:baglantili_ihale_view' as path_to_baglantili_ihale_view %}
+{% url 'mssupplier:order_view' as path_to_view_supplier_order %}
+{% url 'mssupplier:upload_stock_view' as path_to_upload_stock %}
+{% url 'mssupplier:stock_view' as path_to_view_supplier_stock %}
+
+
+<br>
+<br>
+<br>
+<button class="ui button primary sidenavnar">
+    Menüyü Göster
+</button>
+
+<div class="ui sidebar inverted 
+                vertical menu" style="background-color: #2f4050">
+    <h2 style="color:white; text-align:center;">İşlemler</h2>
+    {% if 'tedarikci' not in request.user.username and 'MeyveSebzeDeposu' not in request.user.username %}
+    <a class="item" href="{{path_to_list_depotOrder_depot_based}}">
+        Gelen Siparişleri Görüntüle
+  </a>
+      <a class="item" href="{{path_to_upload_depotOrder}}">
+          Meyve Sebze Depoya Sipariş Gir
+    </a>
+    <a class="item" href="{{path_to_view_supplier_stock_depot_based}}">
+        Bölgesel Tedarikçiye Sipariş Gir
+  </a>
+    {% elif 'MeyveSebzeDeposu' in request.user.username %}
+    <a class="item" href="{{path_to_view_depotOrder}}">
+        Siparişleri Görüntüle
+  </a>
+  <a class="item" href="{{path_to_upload_ihale}}">
+    İhale Kaydı Ekle
+</a>
+<a class="item" href="{{path_to_view_ihale}}">
+    İhale Kaydı Görüntüle
+</a>
+<a class="item" href="{{path_to_list_ikinci_tur_view}}">
+    İkinci Tur İhale Kaydı Görüntüle
+</a>
+<a class="item" href="{{path_to_view_msdepot_stock}}">
+    Stok Kaydı Görüntüle
+</a>
+<a class="item" href="{{path_to_view_msdepot_dashboard}}">
+    Analitik Dashboard
+</a>
+<a class="item" href="{{path_to_view_rakip_fiyat}}">
+    Rakip Fiyat
+</a>
+<a class="item" href="{{path_to_upload_baglantili_ihale_view}}">
+    Bağlantılı İhale Kaydı Ekle
+</a>
+<a class="item" href="{{path_to_baglantili_ihale_view}}">
+    Bağlantılı İhale Kaydı Görüntüle
+</a>
+
+{% else %}
+<a class="item" href="{{path_to_view_supplier_order}}">
+    Siparişleri Görüntüle
+</a>
+<a class="item" href="{{path_to_view_ihale}}">
+    İhale Kaydı Görüntüle
+</a>
+<a class="item" href="{{path_to_list_ikinci_tur_supplier_based_view}}">
+    İkinci Tur İhale Kaydı Görüntüle
+</a>
+<a class="item" href="{{path_to_view_supplier_stock}}">
+    Stok Kaydı Görüntüle
+</a>
+<a class="item" href="{{path_to_upload_stock}}">
+    Stok Kaydı Ekle
+</a>
+<a class="item" href="{{path_to_baglantili_ihale_view}}">
+    Bağlantılı İhale Kaydı Görüntüle
+</a>
+{% endif %}
+</div>
+<div class="pusher">
+    <!-- Site content !-->
+</div>
+
+
+<script>
+    $('.sidenavnar').click(function () {
+        $('.ui.sidebar').sidebar('toggle');
+    })
+  </script>
+
+
+

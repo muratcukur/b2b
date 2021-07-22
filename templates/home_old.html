@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}home{% endblock title %}
+
+{% block content %}
+
+{% url 'login_view_supplier' as path_to_login_supplier %}
+{% url 'login_view_depot' as path_to_login_depot %}
+
+<div class="block-center">
+	<h1>MEYVE SEBZE PLATFORMU</h1>
+
+	<button type="button" name="depot_check" class="ui button depotButton">
+		<a href="{{path_to_login_depot}}">A101 Bölge Girişi</a>
+	</button>
+
+	<button type="button" name="supplier_check" class="ui button supplierButton">		
+		<a href="{{path_to_login_supplier}}">Tedarikçi Girişi</a>
+	</button>
+
+	<br>
+	<br>
+
+<!-- <img src={% static 'meyve_sebze.jpg' %} class="ui fluid image" > -->
+</div>
+{% endblock content %}

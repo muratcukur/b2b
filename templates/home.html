@@ -1,0 +1,153 @@
+{% extends 'base_login.html' %}
+{% load static %}
+{% block title %}login{% endblock title %}
+
+{% block content %}
+
+<style type="text/css">
+
+    .image {
+      margin-top: -100px;
+	}
+
+	.panel-container {
+		text-align: center;
+		width: 100%;
+		padding: 0px;
+		margin-top: 100px;
+	
+	}
+
+	.panel-logo {
+		
+		margin-left: 24px;
+		margin-right: 24px;
+		width: 224px;
+		height: 100px;
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-image: url('{% static 'LOGO.png' %}');
+		background-size: 100px 100px;
+	}
+
+	.panel {
+		position: relative;
+		display: inline-block;
+		width: 600px;
+		height: 500px;
+		z-index: 1;
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-color: rgba(255, 255, 255, 0.5);
+		border-radius: 6px;
+	
+	}
+
+
+	#id_username {
+		width: 200px;
+	}
+
+	#id_password {
+		width: 200px;
+	}
+
+
+	.btn.mtop {
+		width: 200px;
+	}
+
+  </style>
+
+  <div class="block-center">
+	<div class="ui centered grid container">
+	<div class="nine wide column">
+	{% if error_message %}
+		<div class="ui negative message" style="margin-top: 70px;">
+		  <i class="close icon"></i>
+		  	<div class="header">
+		    	{{error_message}}
+		  	</div>
+		</div>
+	{% endif %}
+
+
+
+
+<body class="bg-login" style="margin-top:50px">
+<div class="container">
+    <div class="loginColumns animated fadeInDown">
+		<hr>
+        <div class="row" align="center">
+
+            <div class="col-md-7">
+
+                <div class="panel-logo"></div>
+                <h2 class="font-bold center-block">A101 MEYVE SEBZE B2B SİSTEMİ</h2>
+
+                <p>
+            A101 ve Meyve Sebze tedarikçileri arasında ihale, sipariş takip sistemidir.
+        </p>
+
+            </div>
+		
+			
+            <div class="col-md-5">
+                <div class="ibox-content">
+
+                    <form action="" method="POST" class="m-t" style="margin-top: 90px;" role="form" lang="tr">
+						{% csrf_token %}
+		
+						<table>
+							{{ form.as_table }}
+						</table>
+                        <button type="submit" class="btn btn-info block full-width m-b mtop" >Giriş</button>
+
+                        <p class="text-danger text-center">
+                            <b>
+                                
+                            </b>
+                        </p>
+                    </form>
+                    <p class="m-t">
+
+
+                        <small>A101 YENİ MAĞAZACILIK A.Ş.&copy; <small id="date"></small> </small>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                Copyright A101
+            </div>
+            <div class="col-md-6 text-right">
+                <small>© 2021 - A101 B2B</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+
+
+
+<script>
+
+	document.getElementById("id_username").placeholder = "Kullanıcı Adınız : ";
+	document.getElementById("id_password").placeholder = "Parolanız : ";
+
+	var today = new Date();
+	var dd = String(today.getDate()).padStart(2, '0');
+	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var yyyy = today.getFullYear();
+	today = dd + '/' + mm + '/' + yyyy;
+	document.getElementById("date").innerHTML = today;
+
+</script>
+
+	
+{% endblock content %}

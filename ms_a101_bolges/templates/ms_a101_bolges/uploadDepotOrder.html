@@ -1,0 +1,77 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}upload depot order{% endblock title %}
+
+{% block content %}
+
+
+<div class="block-center">
+	<div class="ui centered grid container">
+	<div class="ten wide column">
+<form action="" method="POST"  class="ui form topmargin">
+    {% csrf_token %}
+    <table>
+    {{form.as_table}}
+    </table>
+    <button type="submit" class="ui positive button">Sipariş Ekle</button>
+
+</form>
+
+</div>
+</div>
+</div>
+
+<script>
+    // Get next week last day.
+    function dates(current) {
+        var week= new Array(); 
+        // Starting Monday not Sunday
+        current.setDate((current.getDate() - current.getDay() +8));
+        for (var i = 0; i < 7; i++) {
+            week.push(
+                new Date(current)
+            ); 
+            current.setDate(current.getDate() +1);
+        }
+        return week[week.length-1]; 
+    }
+</script>
+
+<script>
+    $(function(){
+        var dtToday = new Date();
+        var next_week_last_day = dates(new Date())
+        
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate();
+        var three_date = dtToday.getDate()+3;
+        var seven_date = dtToday.getDate()+7;
+        var year = dtToday.getFullYear();
+
+        var monthNextWeek = next_week_last_day.getMonth() + 1 ;
+        var dayNextWeek = next_week_last_day.getDate();
+        var yearNextWeek = next_week_last_day.getFullYear();
+
+        if(month < 10)
+            month = '0' + month.toString();
+        if(seven_date < 10)
+            seven_date = '0' + seven_date.toString();
+        if(three_date < 10)
+            three_date = '0' + three_date.toString();
+        
+        if (monthNextWeek < 10)
+            monthNextWeek = '0' + monthNextWeek.toString();
+        if (dayNextWeek < 10)
+            dayNextWeek = '0' + dayNextWeek.toString();
+
+        var minDate = year + '-' + month + '-' + three_date;
+        var maxDate = yearNextWeek + '-' + monthNextWeek + '-' + dayNextWeek;
+
+        $('#id_teslim_tarihi').attr('min', minDate);
+        $('#id_teslim_tarihi').attr('max', maxDate);      
+    });
+</script>
+
+
+
+{% endblock content %}

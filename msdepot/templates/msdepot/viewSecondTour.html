@@ -1,0 +1,54 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}view ihale {% endblock title %}
+
+{% block content %}
+
+
+<br>
+<br>
+<br>
+<br>
+
+<h1>İKİNCİ TURU AÇILMIŞ İHALELELER</h1>
+<br>
+<table class="ui celled table" id="ikincitur" style="width:100%">
+    <thead>
+        <tr>
+            <th>İhale</th>
+            <th>Tedarikçiler</th>
+            <th>İhale Kapanış Tarihi</th>
+            <th>Hedef Fiyat</th>
+            <th>Detaya Git</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ikinci_tur in ikinci_turs %}
+        <tr>
+            <td>{{ikinci_tur.ihale_id}}</td>
+            <td> 
+                {% for supplier in ikinci_tur.suppliers.all %} 
+                {{supplier}}
+                {% endfor %}
+            </td>
+            <td>{{ikinci_tur.ihale_end_date|date:"d-m-Y"}}</td>
+            <td>{{ikinci_tur.hedef_fiyat}}</td>
+            <td><a href="{% url 'msdepot:detail_ihale_second_tour_view' ikinci_tur.ihale_id  %}"><button class="ui green button" style="width: 40px;">İhale 2.Tur Detayı Detayı</button></a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+
+    var table = $('#ikincitur').DataTable( {
+        lengthChange: false,
+        buttons: [ 'excel', 'pdf', 'colvis' ]
+    } );
+ 
+    table.buttons().container()
+        .appendTo( $('div.eight.column:eq(0)', table.table().container()) );
+
+</script>
+
+{% endblock content %}

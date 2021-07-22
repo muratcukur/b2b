@@ -1,0 +1,44 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}edit order{% endblock title %}
+
+{% block content %}
+
+
+<div class="block-center">
+	<div class="ui centered grid container">
+	<div class="ten wide column">
+<form action="" method="POST"  class="ui form">
+    {% csrf_token %}
+    {{order_edit_form}}
+    <button type="submit" class="ui positive button">Sipariş Düzenle</button>
+
+</form>
+
+</div>
+</div>
+</div>
+
+
+<script>
+
+    document.getElementById("id_quantity").style.display = "none";
+    document.getElementById("id_unit").style.display = "none";
+    document.getElementById("id_price").style.display = "none";
+    document.getElementById("id_destination").style.display = "none";
+    document.getElementById("id_destination_bolge").style.display = "none";
+    document.getElementById("id_slot").style.display = "none";
+
+
+</script>
+
+<style>
+    [for="id_quantity"] { display: none;}
+    [for="id_unit"] { display: none;}
+    [for="id_price"] { display: none;}
+    [for="id_destination"] { display: none;}
+    [for="id_destination_bolge"] { display: none;}
+    [for="id_slot"] { display: none;}
+
+</style>
+{% endblock content %}

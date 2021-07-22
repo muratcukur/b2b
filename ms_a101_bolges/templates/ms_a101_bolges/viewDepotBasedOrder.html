@@ -1,0 +1,103 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}view depot order{% endblock title %}
+
+{% block content %}
+
+<br>
+<br>
+<br>
+<br>
+
+<h1>A101 BÖLGEYE AÇILAN SİPARİŞLER</h1>
+
+<table class="ui celled table" id="depotOrder" style="width:100%">
+    <thead>
+        <tr>
+            <th>Tedarikçi</th>
+            <th>Ürün</th>
+            <th>Adet</th>
+            <th>Birim</th>
+            <th>Fiyat</th>
+            <th>Sipariş Açılış Tarihi</th>
+            <th>Depo Varış</th>
+            <th>Slot</th>
+            <th>Onay Durumu</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in depotOrder%}
+        <tr>
+            <td>{{order.supplier}}</td>
+            <td>{{order.product}}</td>
+            <td>{{order.quantity}}</td>
+            <td>{{order.unit}}</td>
+            <td>{{order.price}}</td>
+            <td>{{order.order_date|date:"Y-m-d"}}</td>
+            <td>{{order.termin|date:"Y-m-d"}}</td>
+            <td>{{order.slot}}</td>
+            <td>{{order.approved|yesno:"Evet,Hayır"}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+<br>
+<br>
+
+<h1>YEREL TEDARİKÇİLERE AÇILAN SİPARİŞLER</h1>
+
+<table class="ui celled table" id="depotBasedOrder" style="width:100%">
+    <thead>
+        <tr>
+            <th>Tedarikçi</th>
+            <th>Ürün</th>
+            <th>Adet</th>
+            <th>Birim</th>
+            <th>Fiyat</th>
+            <th>Sipariş Açılış Tarihi</th>
+            <th>Depo Varış</th>
+            <th>Slot</th>
+            <th>Onay Durumu</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in depotBasedOrder%}
+        <tr>
+            <td>{{order.supplier}}</td>
+            <td>{{order.product}}</td>
+            <td>{{order.quantity}}</td>
+            <td>{{order.unit}}</td>
+            <td>{{order.price}}</td>
+            <td>{{order.order_date|date:"Y-m-d"}}</td>
+            <td>{{order.termin|date:"Y-m-d"}}</td>
+            <td>{{order.slot}}</td>
+            <td>{{order.approved|yesno:"Evet,Hayır"}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<script>
+
+    var table = $('#depotOrder').DataTable( {
+        lengthChange: false,
+        buttons: [ 'excel', 'pdf', 'colvis' ]
+    } );
+ 
+    table.buttons().container()
+        .appendTo( $('div.eight.column:eq(0)', table.table().container()) );
+
+
+    var table = $('#depotBasedOrder').DataTable( {
+            lengthChange: false,
+            buttons: [ 'excel', 'pdf', 'colvis' ]
+        } );
+     
+        table.buttons().container()
+            .appendTo( $('div.eight.column:eq(0)', table.table().container()) );  
+</script>
+
+{% endblock content %}

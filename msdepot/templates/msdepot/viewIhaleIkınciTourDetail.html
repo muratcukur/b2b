@@ -1,0 +1,197 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}view ihale {% endblock title %}
+
+{% block content %}
+
+
+<style>
+    p {
+        display: inline;
+        font-size: 40px;
+        margin-top: 0px;
+      }
+
+    #gizle {
+        display : none;
+    }
+
+</style>
+<br>
+<br>
+
+{% if error_message %}
+<div class="ui negative message" style="margin-top: 70px;">
+  <i class="close icon"></i>
+      <div class="header">
+        {{error_message}}
+      </div>
+</div>
+{% endif %}
+
+<div class="ui right aligned container">
+<p style="color:red">KALAN SÜRE :  </p>
+<p id="days" style="color:red; font-size:60px"></p>
+<p id="hours" style="color:red; font-size:60px"></p>
+<p id="mins" style="color:red; font-size:60px"></p>
+<p id="secs" style="color:red; font-size:60px"></p>
+<h2 id="end" style="color:red; font-size:60px"></h2>
+</div>
+
+<div class="ui modal ihaleikinciturteklifmodal">
+    <i class="close icon" style="color:red; font-size: 40px;"></i>
+    <div class="header" style="text-align: center;">
+        TEKLİF VER
+    </div>
+
+    <form action="" method="POST" class="ui form" id="ihaleTeklifVer">
+        {% csrf_token %}
+        <table>
+        {{ihale_ikinci_tur_teklif_form.as_table}}
+        </table>
+        <button type="submit" name="ihale_teklif_sub" class="ui positive button" style="margin-top: 10px; float:right;">2.TUR TEKLİF EKLE</button>
+    </form>
+</div>
+
+
+{% if 'MeyveSebzeDeposu' not in request.user.username%}
+<div class=" ui right aligned container" id="gizle">
+<button class="ui green button" id="addIhaleTeklifButton" style="width: 70px; margin-top: 30px;" onclick="addIhaleIkınciTurTeklif()"> TEKLİF VER </button>
+</div>
+{% endif %}
+<br>
+<br>
+
+<div class="ui right aligned container">
+{% if detail_ihale_ikinci_tour_teklif.hedef_fiyat%}
+<p>2.Tur Hedef Fiyat : {{detail_ihale_ikinci_tour_teklif.hedef_fiyat}} tl</p>
+{% else %}
+<p>2.Tur Hedef Fiyat Belirtilmemiştir.</p>
+{% endif %}
+</div>
+
+<br>
+<br>
+<table class="ui celled table" id="ihale" style="width:100%">
+    <thead>
+        <tr>
+            <th>Meyve Sebze</th>
+            <th>Adet</th>
+            <th>Birim</th> 
+            <th>Kasa Ebatı</th>
+            <th>Paletteki Kasa Sayısı</th>
+            <th>Palet Ölçüsü</th>
+            <th>Spekt Açıklama</th>
+            <th>Sevk Koşulları</th>
+            <th>Koli Koşulları</th>
+            <th>Teslim Tarihi</th>
+            <th>İhale Kapanış Tarihi</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{detail_ihale_ikinci_tour.fruit_vegetable_name}}</td>
+            <td>{{detail_ihale_ikinci_tour.quantity}}</td>
+            <td>{{detail_ihale_ikinci_tour.unit}}</td>
+            <td>{{detail_ihale_ikinci_tour.kasa_ebati}}</td>
+            <td>{{detail_ihale_ikinci_tour.paletteki_kasa_sayisi}}</td>
+            <td>{{detail_ihale_ikinci_tour.palet_olcusu}}</td>
+            <td>{{detail_ihale_ikinci_tour.spekt_aciklama}}</td>
+            <td>{{detail_ihale_ikinci_tour.sevk_kosullari}}</td>
+            <td>{{detail_ihale_ikinci_tour.koli_kosullari}}</td>
+            <td>{{detail_ihale_ikinci_tour.teslim_tarihi|date:"d-m-Y"}}</td>
+            <td>{{detail_ihale_ikinci_tour_teklif.ihale_end_date|date:"d-m-Y"}}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<h1 style="color:blue;">2.TUR TEKLİFLER</h1>
+<table class="ui celled table" id="ihale" style="width:100%">
+    <thead>
+        <tr>
+            <th>Teklif Veren</th>
+            <th>Tarih</th>
+            <th>Birim Fiyat</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ihale_teklif in detail_ihale_ikinci_tour_teklifler%}
+        <tr>
+            <td>{{ihale_teklif.tedarikci}}</td>
+            <td>{{ihale_teklif.ihale_teklif_date|date:"d-m-Y"}}</td>
+            <td>{{ihale_teklif.fiyat}} TL</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+<script>
+
+    var table = $('#ihale').DataTable( {
+        lengthChange: false,
+        buttons: [ 'excel', 'pdf', 'colvis' ]
+    } );
+ 
+    table.buttons().container()
+        .appendTo( $('div.eight.column:eq(0)', table.table().container()) );
+
+</script>
+
+<script>
+    function addIhaleIkınciTurTeklif() {
+        $('.ihaleikinciturteklifmodal')
+        .modal('show');
+    }
+</script>
+
+<script>
+    function startSecondTour() {
+        $('.ikinciturmodal')
+        .modal('show');
+    }
+</script>
+
+
+
+<script>
+    
+    var countDownDate = new Date({{ detail_ihale_ikinci_tour_teklif.ihale_end_date|date:"U" }} * 1000);
+    // Run myfunc every second
+    var myfunc = setInterval(function() {
+
+    var now = new Date().getTime();
+    var timeleft = countDownDate - now;
+        
+    // Calculating the days, hours, minutes and seconds left
+    var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+        
+    // Result is output to the specific element
+    document.getElementById("days").innerHTML = days + "gün "
+    document.getElementById("hours").innerHTML = hours + "saat " 
+    document.getElementById("mins").innerHTML = minutes + "dk " 
+    document.getElementById("secs").innerHTML = seconds + "sn " 
+        
+    // Display the message when countdown is over and hide addIhaleTeklif button
+    if (timeleft < 0) {
+        clearInterval(myfunc);
+        document.getElementById("days").innerHTML = ""
+        document.getElementById("hours").innerHTML = "" 
+        document.getElementById("mins").innerHTML = ""
+        document.getElementById("secs").innerHTML = ""
+        document.getElementById("end").innerHTML = "SÜRE DOLMUŞTUR!!";
+       
+    }
+    else {
+        document.getElementById("gizle").style.display = "block";
+    }
+    }, 1000);
+</script>
+
+
+{% endblock content %}

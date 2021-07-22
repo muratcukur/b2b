@@ -1,0 +1,86 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}upload bağlantılı ürün ihale{% endblock title %}
+
+{% block content %}
+
+
+<div class="block-center">
+	<div class="ui centered grid container">
+	<div class="ten wide column">
+<form action="" method="POST"  class="ui form" style="margin-top: 20px;">
+    {% csrf_token %}
+    <table class="ihale-list">
+    {{form.as_table}}
+    <tr style="display: none;">
+        <td> <input type="number" id="counter" name="counter"/> </td>
+    </tr>
+    </table>
+ <p>   <a href="#" title="" class="add-row"><button class="ui negative button">Ay ve Hedef Tonaj ve Fiyat Girişi Yap</button></a> </p>
+    <button type="submit" class="ui positive button">Bağlantılı İhale Ekle</button>
+
+</form>
+
+
+
+</div>
+</div>
+</div>
+
+<script>
+
+    var data_dict = [];
+    var counter = 0;
+
+        jQuery('a.add-row').click(function(event){
+            event.preventDefault();
+            counter++;
+            var newRow = jQuery('<tr><th><label>Ay:</label></th><td><select id="month_ek' + counter + '" name="month' +
+                counter + '"/><option value="" selected>---------</option><option value="Ocak">Ocak</option><option value="Şubat">Şubat</option><option value="Mart">Mart</option><option value="Nisan">Nisan</option><option value="Mayıs">Mayıs</option><option value="Haziran">Haziran</option><option value="Temmuz">Temmuz</option><option value="Ağustos">Ağustos</option><option value="Eylül">Eylül</option><option value="Ekim">Ekim</option><option value="Kasım">Kasım</option><option value="Aralık">Aralık</option></select></td><th><label>Hedef Tonaj:</label><td><input type="number" step="0.01" id = "hedef_tonaj_ek' + counter + '" name="hedef_tonaj' +
+                counter + '"/></td><th><label>Hedef Fiyat:</label></th><td><input type="number" step="0.01" id = "hedef_fiyat_ek' + counter + '" name="hedef_fiyat' +
+                counter + '"/></td><td><button type="button" class="remove-button">Sil</button></td></tr>');
+            jQuery('table.ihale-list').append(newRow);
+
+        console.log(counter)
+        $('input[name=counter]').val(counter);
+        console.log(document.getElementById('counter').value);
+
+});
+
+
+jQuery('a.save-row').click(function(event){
+
+    for (var ii = 1; ii < counter+ 1; ii++ )  {
+                //unique id for each added data row needed when reading data directly from table
+                var data_id = data_dict.length;
+    
+                var field_val1 = document.getElementById("month_ek"+ii).value;
+                var field_val2 = document.getElementById("hedef_tonaj_ek"+ii).value;
+                var field_val3 = document.getElementById("hedef_fiyat_ek"+ii).value;
+           
+                        data_dict.push({
+                           key:  data_id,
+                           month : field_val1,
+                           hedef_tonaj : field_val2,
+                           hedef_fiyat : field_val3,
+                        
+                       });
+
+    
+        };
+});
+
+
+</script>
+
+<script>
+
+    $(".ihale-list").on('click', '.remove-button', function(e) {
+        var whichtr = $(this).closest("tr");
+    
+        whichtr.remove();      
+    });
+
+</script>
+
+{% endblock content %}

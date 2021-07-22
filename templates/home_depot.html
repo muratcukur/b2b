@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}bölge platformu{% endblock title %}
+
+{% block content %}
+
+{% url 'ms_a101_bolges:upload_depotOrder_view' as path_to_upload_depotOrder %}
+{% url 'ms_a101_bolges:depotOrder_view' as path_to_view_depotOrder %}
+
+{% include 'sidenavbar.html' %}
+
+<div class="block-center">
+
+	<br>
+	<br>
+
+<!-- <img src={% static 'meyve_sebze.jpg' %} class="ui fluid image" > -->
+</div>
+
+
+
+
+{% endblock content %}

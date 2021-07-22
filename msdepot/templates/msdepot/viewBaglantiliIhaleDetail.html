@@ -1,0 +1,281 @@
+{% extends 'baseDepot.html' %}
+
+{% block title %}view ihale {% endblock title %}
+
+{% block content %}
+
+
+<style>
+    p {
+        display: inline;
+        font-size: 40px;
+        margin-top: 0px;
+      }
+
+    #gizle {
+        display : none;
+    }
+
+</style>
+
+{% if error_message %}
+<div class="ui negative message" style="margin-top: 70px;">
+  <i class="close icon"></i>
+      <div class="header">
+        {{error_message}}
+      </div>
+</div>
+{% endif %}
+
+<div class="ui right aligned container">
+<p style="color:red">KALAN SÜRE :  </p>
+<p id="days" style="color:red; font-size:60px"></p>
+<p id="hours" style="color:red; font-size:60px"></p>
+<p id="mins" style="color:red; font-size:60px"></p>
+<p id="secs" style="color:red; font-size:60px"></p>
+<h2 id="end" style="color:red; font-size:60px"></h2>
+</div>
+
+
+<div class="ui modal ihaleteklifmodal">
+    <i class="close icon" style="color:red; font-size: 40px;"></i>
+    <div class="header" style="text-align: center;">
+        TEKLİF VER
+    </div>
+
+    <form action="" method="POST" class="ui form" id="ihaleTeklifVer">
+        {% csrf_token %}
+        <table class="ihale-list">
+        
+        </table>
+        <p>   <a href="#" title="" class="add-row"><button class="ui negative button">Ay ve Hedef Tonaj Girişi Yap</button></a> </p>
+        <button type="submit" name="ihale_teklif_sub" class="ui positive button" style="margin-top: 10px; float:right;">TEKLİF EKLE</button>
+    </form>
+</div>
+
+
+{% if 'MeyveSebzeDeposu' not in request.user.username%}
+<div class=" ui right aligned container" id="gizle">
+<button class="ui green button" id="addIhaleTeklifButton" style="width: 70px; margin-top: 30px;" onclick="addIhaleTeklif()"> TEKLİF VER </button>
+</div>
+{% endif %}
+<br>
+<br>
+
+
+<br>
+<br>
+
+
+<table class="ui celled table" id="ihale" style="width:100%">
+    <thead>
+            <tr>
+                <th>Id</th>
+                <th>Meyve Sebze</th>
+                <th>Ürün İçerikleri Standartları</th>
+                <th>Koli İçeriği</th>
+                <th>Palet İçeriği</th>
+                <th>Ambalaj Maddesi</th>
+                <th>Sabit Fiyat Garantisi</th>
+                <th>Raf Ömrü</th>
+                <th>Tat Testi Sonucu</th>
+                <th>Tavsiye</th>
+                <th>Karar</th>
+                <th>Yorum</th>
+                <th>İhale Bitiş Tarihi</th>
+            
+            </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{detail_ihale.id}}</td>
+            <td>{{detail_ihale.fruit_vegetable_name}}</td>
+            <td>{{detail_ihale.urun_icerikleri_standartlari}}</td>
+            <td>{{detail_ihale.koli_icerigi}}</td>
+            <td>{{detail_ihale.palet_icerigi}}</td>
+            <td>{{detail_ihale.ambalaj_maddesi}}</td>
+            <td>{{detail_ihale.sabit_fiyat_garantisi}}</td>
+            <td>{{detail_ihale.raf_omru}}</td>
+            <td>{{detail_ihale.tat_testi_sonucu}}</td>
+            <td>{{detail_ihale.tavsiye}}</td>
+            <td>{{detail_ihale.karar}}</td>
+            <td>{{detail_ihale.yorum}}</td>
+            <td>{{detail_ihale.ihale_end_date|date:"d-m-Y"}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<br>
+<br>
+
+<table class="ui celled table" id="ay_hedef_tonaj" style="width:100%">
+    <thead>
+            <tr>
+                <th>Ay</th>
+                <th>Hedef Tonaj</th>  
+                <th>Hedef Fiyat</th>      
+            </tr>
+    </thead>
+    <tbody>
+        {% for ay_tonaj in ay_hedef_tonaj %}
+        <tr>
+            <td>{{ay_tonaj.month}}</td>
+            <td>{{ay_tonaj.planlanan_hedef_tonaj}}</td>
+            <td>{{ay_tonaj.planlanan_hedef_fiyat}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<h1 style="color:blue;">TEKLİFLER</h1>
+<table class="ui celled table" id="ihale-teklif" style="width:100%">
+    <thead>
+        <tr>
+            <th>Teklif Veren</th>
+            <th>Tarih</th>
+            <th>Ay</th>
+            <th>Hedef Tonaj</th>
+            <th>Hedef Fiyat</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ihale_teklif in detail_ihale_teklif%}
+        <tr>
+            <td>{{ihale_teklif.tedarikci}}</td>
+            <td>{{ihale_teklif.ihale_teklif_date|date:"d-m-Y"}}</td>
+            <td>{{ihale_teklif.month}}</td>
+            <td>{{ihale_teklif.planlanan_hedef_tonaj}}</td>
+            <td>{{ihale_teklif.planlanan_hedef_fiyat}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<script>
+
+    var table = $('#ihale').DataTable( {
+        lengthChange: false,
+        buttons: [ 'excel', 'pdf', 'colvis' ]
+    } );
+ 
+    table.buttons().container()
+        .appendTo( $('div.eight.column:eq(0)', table.table().container()) );
+
+</script>
+
+<script>
+
+    var table = $('#ihale-teklif').DataTable( {
+        lengthChange: false,
+        buttons: [ 'excel', 'pdf', 'colvis' ]
+    } );
+ 
+    table.buttons().container()
+        .appendTo( $('div.eight.column:eq(0)', table.table().container()) );
+
+</script>
+
+<script>
+    function addIhaleTeklif() {
+        $('.ihaleteklifmodal')
+        .modal('show');
+    }
+</script>
+
+
+
+<script>
+    
+    var countDownDate = new Date({{ detail_ihale.ihale_end_date|date:"U" }} * 1000);
+    // Run myfunc every second
+    var myfunc = setInterval(function() {
+
+    var now = new Date().getTime();
+    var timeleft = countDownDate - now;
+        
+    // Calculating the days, hours, minutes and seconds left
+    var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+        
+    // Result is output to the specific element
+    document.getElementById("days").innerHTML = days + "gün "
+    document.getElementById("hours").innerHTML = hours + "saat " 
+    document.getElementById("mins").innerHTML = minutes + "dk " 
+    document.getElementById("secs").innerHTML = seconds + "sn " 
+        
+    // Display the message when countdown is over and hide addIhaleTeklif button
+    if (timeleft < 0) {
+        clearInterval(myfunc);
+        document.getElementById("days").innerHTML = ""
+        document.getElementById("hours").innerHTML = "" 
+        document.getElementById("mins").innerHTML = ""
+        document.getElementById("secs").innerHTML = ""
+        document.getElementById("end").innerHTML = "SÜRE DOLMUŞTUR!!";
+       
+    }
+    else {
+        document.getElementById("gizle").style.display = "block";
+    }
+    }, 1000);
+</script>
+
+
+
+<script>
+
+    var data_dict = [];
+    var counter = 0;
+
+        jQuery('a.add-row').click(function(event){
+            event.preventDefault();
+            counter++;
+            var newRow = jQuery('<tr><th><label>Ay:</label></th><td><select id="month_ek' + counter + '" name="month' +
+                counter + '"/><option value="" selected>---------</option><option value="Ocak">Ocak</option><option value="Şubat">Şubat</option><option value="Mart">Mart</option><option value="Nisan">Nisan</option><option value="Mayıs">Mayıs</option><option value="Haziran">Haziran</option><option value="Temmuz">Temmuz</option><option value="Ağustos">Ağustos</option><option value="Eylül">Eylül</option><option value="Ekim">Ekim</option><option value="Kasım">Kasım</option><option value="Aralık">Aralık</option></select></td><th><label>Hedef Tonaj:</label><td><input type="number" step="0.01" id = "hedef_tonaj_ek' + counter + '" name="hedef_tonaj' +
+                counter + '"/></td><th><label>Hedef Fiyat:</label></th><td><input type="number" step="0.01" id = "hedef_fiyat_ek' + counter + '" name="hedef_fiyat' +
+                counter + '"/></td><td><button type="button" class="remove-button">Sil</button></td></tr>');
+            jQuery('table.ihale-list').append(newRow);
+
+});
+
+
+jQuery('a.save-row').click(function(event){
+
+    for (var ii = 1; ii < counter+ 1; ii++ )  {
+                //unique id for each added data row needed when reading data directly from table
+                var data_id = data_dict.length;
+    
+                var field_val1 = document.getElementById("month_ek"+ii).value;
+                var field_val2 = document.getElementById("hedef_tonaj_ek"+ii).value;
+                var field_val3 = document.getElementById("hedef_fiyat_ek"+ii).value;
+           
+                        data_dict.push({
+                           key:  data_id,
+                           month : field_val1,
+                           hedef_tonaj : field_val2,
+                           hedef_fiyat : field_val3,
+                        
+                       });
+
+    
+        };
+});
+
+
+</script>
+
+<script>
+
+    $(".ihale-list").on('click', '.remove-button', function(e) {
+        var whichtr = $(this).closest("tr");
+    
+        whichtr.remove();      
+    });
+
+</script>
+
+
+{% endblock content %}

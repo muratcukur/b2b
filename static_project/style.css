@@ -1,0 +1,269 @@
+body {
+    padding: 1em;
+
+}
+
+.mymodal {
+	height: 900px !important;
+	top: 200px !important;
+	font-size: 20px !important;
+	
+}
+
+
+.mytable {
+    margin:auto !important;
+  }
+
+
+ul li {
+	margin: 0 0 10px 10px;
+}
+
+.ui.button {
+	width: 200px !important ;
+	border-radius: 10px !important;
+}
+
+
+.ui.button.filter {
+	margin-top: 50px !important;
+}
+
+.ui.button.bottom {
+	margin-bottom: 50px !important;
+}
+
+
+.block-center{
+	margin: 0 auto !important;
+	text-align : center !important;
+}
+
+
+
+.block-center-message{
+	width: 60% !important;
+	margin: 0 auto !important;
+	text-align : center !important;
+	margin-bottom: 50px !important;
+}
+
+.field-with {
+	width: 100%;
+}
+
+.mtop {
+	margin-top: 20px !important;
+}
+
+.chooseDateApriori {
+	display:none;
+	width: 60% !important;
+	margin: 0 auto !important;
+	border-radius: 25px !important;
+	margin-top: 20px !important;
+}
+
+.contact-background-image {
+    background-image: url("https://wallpaper.wiki/wp-content/uploads/2017/06/Gradient-Wallpaper.jpg");
+    padding: 1px 0 100px 0;
+}
+
+#dropdownmenu{
+	width: 50% !important;
+	text-align: center !important;
+	margin: 0 auto !important;
+	margin-top: 20px !important;
+}
+
+.ui.selection.dropdown {
+  border-radius: 25px !important;
+}
+
+
+.block-bilgi{
+	width: 70% !important;
+	text-align: center !important;
+	margin: 0 auto !important;
+}
+
+.uploadtext{
+	margin-top: 100px !important;
+}
+
+.warning{
+	margin: 0 auto !important;
+	margin-top: 100px !important;
+	width: 70% !important;
+}
+
+
+.depo_search{
+	margin-top: 5px !important;
+	width: 100% !important;
+	text-align: center;
+
+}
+
+.depotButton{
+	width: 100% !important;
+	background-color: #5cd730 !important;
+	font-weight: bold !important;
+	font-size: 22px !important;
+	height: 200px !important;
+	margin-top: 100px !important;
+
+}
+
+.supplierButton{
+	width: 100% !important;
+	background-color: #d75f30 !important;
+	font-size: 25px !important;
+	height: 200px !important;
+	margin-top: 100px !important;
+
+}
+
+
+.card-title{
+	text-align: center !important;
+	background-color: #6a3ff6 !important;
+	border-radius: 25px !important;
+
+}
+
+.table-kütük{
+	font-size: 14px !important;
+}
+
+.notmodal{
+	width: 30% !important;
+}
+
+#notEkle.ui.form{
+	height: 300px !important;
+	width: 100% !important;
+}
+
+#id_note{
+	margin-top: 10px !important;
+	width: 100% !important;
+	
+}
+
+#id_note_date.form-control{
+	margin-top: 10px !important;
+	width: 100% !important;
+	
+}
+
+label[for=id_note] {
+	color: blue !important;
+	font-size: 20px !important;
+}
+
+label[for=id_note_date] {
+	color: blue !important;
+	font-size: 20px !important;
+}
+
+label[for=id_depo_kodu_kütük] {
+	color: green !important;
+	font-size: 20px !important;
+	
+}
+
+.ui.form.topmargin {
+	margin-top: 150px !important;
+	width: 100% !important;
+}
+
+body > div.ui.container > div > button.ui.button > a {
+	color: white;
+}
+
+label {
+	color:rgb(248, 15, 15) !important;
+	font-size: 15px !important;
+
+}
+
+#depotOrder_filter > label > span > input[type=search] {
+	font-size: 15px !important;
+}
+
+#ihale_filter > label > span > input[type=search] {
+	font-size: 15px !important;
+}
+
+h1 {
+	color: red !important;
+}
+
+label[for=id_username] {
+	display : none !important;
+}
+
+label[for=id_password] {
+	display : none !important;
+}
+
+
+
+.login-panel {
+	margin-top: 25% !important;
+  }
+
+.loginscreen.middle-box {
+width: 300px !important;
+}
+.loginColumns {
+max-width: 800px !important;
+margin: 0 auto !important;
+padding: 100px 20px 20px 20px !important;
+}
+
+.m-t-none {
+	margin-top: 0 !important;
+  }
+  .m-t-xxs {
+	margin-top: 1px !important;
+  }
+  .m-t-xs {
+	margin-top: 5px !important;
+  }
+  .m-t-sm {
+	margin-top: 10px !important;
+  }
+
+  .m-t-md {
+	margin-top: 20px !important;
+  }
+  .m-t-lg {
+	margin-top: 30px !important;
+  }
+  .m-t-xl {
+	margin-top: 40px !important;
+  }
+  .m-t-n-xxs {
+	margin-top: -1px !important;
+  }
+  .m-t-n-xs {
+	margin-top: -5px !important;
+  }
+  .m-t-n-sm {
+	margin-top: -10px !important;
+  }
+  .m-t-n {
+	margin-top: -15px !important;
+  }
+  .m-t-n-md {
+	margin-top: -20px !important;
+  }
+  .m-t-n-lg {
+	margin-top: -30px !important;
+  }
+  .m-t-n-xl {
+	margin-top: -40px !important;
+  }
