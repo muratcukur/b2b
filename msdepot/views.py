@@ -239,6 +239,8 @@ def scrap(request):
             #driver = webdriver.Chrome(url, options=options)
             opts = webdriver.ChromeOptions()
             opts.headless =True
+            opts.add_argument("window-size=1920x1480")
+            opts.add_argument("disable-dev-shm-usage")
             driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.GOOGLE).install() ,options=opts )
             driver.get("https://www.migros.com.tr/")
             time.sleep(3)
@@ -308,6 +310,8 @@ def scrap(request):
             #driver = webdriver.Chrome(url, options=options)
             opts = webdriver.ChromeOptions()
             opts.headless =True
+            opts.add_argument("window-size=1920x1480")
+            opts.add_argument("disable-dev-shm-usage")
             driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.GOOGLE).install(), options=opts)
             driver.get("https://www.sokmarket.com.tr/")
             search_bar = driver.find_element_by_name('search')
