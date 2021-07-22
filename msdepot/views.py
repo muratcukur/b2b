@@ -178,15 +178,15 @@ def dashboard_view(request):
     
     # EN FAZLA İHALE KAZANAN FİRMALARIN GRAFİĞİ
     cursor = connection.cursor()
-    query = """ WITH data as(select tedarikci_id, count(*) as toplam  from (select ihale_id_id, tedarikci_id,fiyat, rank() over(PARTITION BY ihale_id_id ORDER BY fiyat desc ) as min_ihale from msdepot_ihaleteklif) as abc where min_ihale == 1 GROUP BY tedarikci_id) select a.tedarikci_id, a.toplam, b.username from data as a left join auth_user b on a.tedarikci_id = b.id """
-    cursor.execute(query)
-    result = cursor.fetchall()
-    columns = cursor.description
-    column = []
-    for col in columns:
-        column.append(col[0])
-    ihale_kazanan = pd.DataFrame(result,columns=column)
-    graph_ihale_kazananlar = ihale_kazananlar(ihale_kazanan)
+    #query = """ WITH data as(select tedarikci_id, count(*) as toplam  from (select ihale_id_id, tedarikci_id,fiyat, rank() over(PARTITION BY ihale_id_id ORDER BY fiyat desc ) as min_ihale from msdepot_ihaleteklif) where min_ihale == 1 GROUP BY tedarikci_id) select a.tedarikci_id, a.toplam, b.username from data as a left join auth_user b on a.tedarikci_id = b.id """
+    #cursor.execute(query)
+    #result = cursor.fetchall()
+    #columns = cursor.description
+    #column = []
+    #for col in columns:
+    #    column.append(col[0])
+    #ihale_kazanan = pd.DataFrame(result,columns=column)
+    #graph_ihale_kazananlar = ihale_kazananlar(ihale_kazanan)
 
     #MEYVE SEBZEYİ KAÇ FİRMANIN SATTIĞINI GÖSTEREN GRAFİK
     query2 = """  WITH data as (select fruit_vegetable_name_id, count(*) as toplam from mssupplier_supplierstock GROUP by fruit_vegetable_name_id) SELECT b.fruit_vegetable_name, a.toplam from data as a left join msdepot_meyvesebzeyeni as b on a.fruit_vegetable_name_id = b.id """
@@ -203,7 +203,7 @@ def dashboard_view(request):
 
     context = {
     'graph_bolgesel_gelen_siparis' : graph_bolgesel_gelen_siparis,
-    'graph_ihale_kazananlar' : graph_ihale_kazananlar,
+    #'graph_ihale_kazananlar' : graph_ihale_kazananlar,
     'graph_ms_firma_sayilari' : graph_ms_firma_sayilari,
     }
 
