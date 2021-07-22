@@ -178,7 +178,7 @@ def dashboard_view(request):
     
     # EN FAZLA İHALE KAZANAN FİRMALARIN GRAFİĞİ
     cursor = connection.cursor()
-    query = """ WITH data as(select tedarikci_id, count(*) as toplam  from (select ihale_id_id, tedarikci_id,fiyat, rank() over(PARTITION BY ihale_id_id ORDER BY fiyat desc ) as min_ihale from msdepot_ihaleteklif) where min_ihale == 1 GROUP BY tedarikci_id) select a.tedarikci_id, a.toplam, b.username from data as a left join auth_user b on a.tedarikci_id = b.id """
+    query = """ WITH data as(select tedarikci_id, count(*) as toplam  from (select ihale_id_id, tedarikci_id,fiyat, rank() over(PARTITION BY ihale_id_id ORDER BY fiyat desc ) as min_ihale from msdepot_ihaleteklif) as abc where min_ihale == 1 GROUP BY tedarikci_id) select a.tedarikci_id, a.toplam, b.username from data as a left join auth_user b on a.tedarikci_id = b.id """
     cursor.execute(query)
     result = cursor.fetchall()
     columns = cursor.description
