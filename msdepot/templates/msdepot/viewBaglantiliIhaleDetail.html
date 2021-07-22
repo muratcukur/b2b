@@ -46,7 +46,9 @@
     <form action="" method="POST" class="ui form" id="ihaleTeklifVer">
         {% csrf_token %}
         <table class="ihale-list">
-        
+            <tr style="display: none;">
+                <td> <input type="number" id="counter" name="counter"/> </td>
+            </tr>
         </table>
         <p>   <a href="#" title="" class="add-row"><button class="ui negative button">Ay ve Hedef Tonaj Girişi Yap</button></a> </p>
         <button type="submit" name="ihale_teklif_sub" class="ui positive button" style="margin-top: 10px; float:right;">TEKLİF EKLE</button>
@@ -238,6 +240,9 @@
                 counter + '"/></td><th><label>Hedef Fiyat:</label></th><td><input type="number" step="0.01" id = "hedef_fiyat_ek' + counter + '" name="hedef_fiyat' +
                 counter + '"/></td><td><button type="button" class="remove-button">Sil</button></td></tr>');
             jQuery('table.ihale-list').append(newRow);
+            
+        $('input[name=counter]').val(counter);
+        console.log(document.getElementById('counter').value);
 
 });
 
