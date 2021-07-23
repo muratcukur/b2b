@@ -4,12 +4,11 @@ from rq import Worker, Queue, Connection
 
 listen = ['high', 'default', 'low']
 
-redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
+redis_url = os.getenv('REDISTOGO_URL', 'redis://redistogo:9eaca0616a5dba0da432cbae5b3ae40b@soapfish.redistogo.com:11585/')
 
 CACHES = {
         'default': {
         'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': '%s:%s' % (redis_url.hostname, redis_url.port),
         'OPTIONS': {
             'DB': 0,   # or 1?
             'PASSWORD': redis_url.password,
@@ -19,7 +18,7 @@ CACHES = {
  }
 
 CELERY_RESULT_BACKEND = redis_url
-BROKER_URL = 'redis://localhost:6379'
+BROKER_URL = 'redis://redistogo:9eaca0616a5dba0da432cbae5b3ae40b@soapfish.redistogo.com:11585/'
 
 conn = redis.from_url(redis_url)
 
