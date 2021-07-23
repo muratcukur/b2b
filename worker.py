@@ -11,7 +11,6 @@ CACHES = {
         'BACKEND': 'redis_cache.RedisCache',
         'OPTIONS': {
             'DB': 0,   # or 1?
-            'PASSWORD': redis_url.password,
             #'PARSER_CLASS': 'redis.connection.HiredisParser'
         },
     },
