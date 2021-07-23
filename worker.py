@@ -6,6 +6,21 @@ listen = ['high', 'default', 'low']
 
 redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
 
+CACHES = {
+        'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': '%s:%s' % (redis_url.hostname, redis_url.port),
+        'OPTIONS': {
+            'DB': 0,   # or 1?
+            'PASSWORD': redis_url.password,
+            #'PARSER_CLASS': 'redis.connection.HiredisParser'
+        },
+    },
+ }
+
+CELERY_RESULT_BACKEND = redis_url
+BROKER_URL = 'redis://localhost:6379'
+
 conn = redis.from_url(redis_url)
 
 
