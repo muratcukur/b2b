@@ -29,8 +29,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.utils import ChromeType
 
 # heroku redis queue
-from rq import Queue
 from worker import conn
+from redis import Redis
+from rq import Worker, Queue, Connection
 
 # Create your views here.
 
@@ -218,6 +219,79 @@ def dashboard_view(request):
 
     return render(request, 'msdepot/viewDashboard.html', context)
 
+
+def scrap_redis(fruits):
+    RakipFiyatTakip.objects.all().delete()  ## Entry being Model Name. 
+
+    meyve_fiyat_migros = {}
+    meyve_fiyat_migros['Fiyat'] = {}
+    meyve_fiyat_migros['İndirimde mi?'] = {}
+
+    for fruit in fruits:
+        #options = Options()
+        #options.headless = True
+        #options.add_argument("--window-size=1920,1080")
+        #url = staticfiles_storage.path('chromedriver.exe')
+        #driver = webdriver.Chrome(url, options=options)
+        opts = webdriver.ChromeOptions()
+        opts.add_argument("--headless")
+        opts.add_argument("--window-size=1920x1480")
+        opts.add_argument("--no-sandbox")
+        opts.add_argument("--disable-dev-shm-usage")
+        driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.GOOGLE).install() ,options=opts )
+        driver.get("https://www.migros.com.tr/")
+        time.sleep(3)
+        try: 
+            popup = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CLASS_NAME, "mfp-close")))
+            popup.click()
+        except:
+            pass
+        
+        try: 
+            popup = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CLASS_NAME, "fa-w-10")))
+            popup.click()
+        except:
+            pass
+        search_bar = driver.find_element_by_xpath('//*[@id="product-search-combobox--trigger"]')
+        search_bar.clear()
+        search_bar.send_keys(fruit)
+        search_bar.send_keys(Keys.RETURN)
+        time.sleep(2)
+        try:
+            isim = driver.find_element_by_class_name('product-name').text
+            elements=WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, '.product-cards > .ng-star-inserted')))
+            old_fiyat = elements[0].find_element_by_css_selector(".price-old .amount").text
+            new_fiyat = elements[0].find_element_by_css_selector(".price-new .amount").text
+            fiyat = old_fiyat + " "+ new_fiyat
+            meyve_fiyat_migros['Fiyat'][isim] = fiyat
+            meyve_fiyat_migros['İndirimde mi?'][isim] = "evet"
+        except:
+            isim = driver.find_element_by_class_name('product-name').text
+            fiyat = driver.find_element_by_class_name('amount').text
+            meyve_fiyat_migros['Fiyat'][isim] = fiyat
+            meyve_fiyat_migros['İndirimde mi?'][isim] = "hayır"
+
+        driver.close()
+
+    #data_migros = pd.DataFrame(list(meyve_fiyat_migros.items()), columns=['Meyve Sebze', 'Fiyat'])
+
+    data_migros = pd.DataFrame(meyve_fiyat_migros).reset_index()
+    data_migros = data_migros.rename(columns={'index': 'Meyve Sebze'})
+
+    data_migros["Mağaza"] = "Migros"      
+
+    df_records_migros = data_migros.to_dict('records')
+
+    model_instances = [RakipFiyatTakip(
+        fruit_vegetable_name=record['Meyve Sebze'],
+        price=record['Fiyat'],
+        rakip=record['Mağaza'],
+        indirim=record['İndirimde mi?'],
+    ) for record in df_records_migros]
+
+    RakipFiyatTakip.objects.bulk_create(model_instances)
+
+
 @login_required
 def scrap(request):
     #https://dev.to/mdrhmn/web-scraping-using-django-and-selenium-3ecg
@@ -226,81 +300,21 @@ def scrap(request):
 
     rakipFiyatTakip = RakipFiyatTakip.objects.all()
 
-    fruits = ["elma starking"]
+    fruits = ["elma starking", "elma golden", "elma granny", "muz yerli", "kıvırcık", "erik angelica", "erik papaz", "patates", "soğan"]
 
     if request.method == "POST":
+        # this import solves a rq bug which currently exists
+        from .views import scrap_redis
+        q = Queue(connection=conn)
 
-        RakipFiyatTakip.objects.all().delete()  ## Entry being Model Name. 
+        #q.enqueue(scrap_redis, obj=fruits)
 
-        meyve_fiyat_migros = {}
-        meyve_fiyat_migros['Fiyat'] = {}
-        meyve_fiyat_migros['İndirimde mi?'] = {}
-
-        for fruit in fruits:
-            #options = Options()
-            #options.headless = True
-            #options.add_argument("--window-size=1920,1080")
-            #url = staticfiles_storage.path('chromedriver.exe')
-            #driver = webdriver.Chrome(url, options=options)
-            opts = webdriver.ChromeOptions()
-            opts.headless =True
-            opts.add_argument("window-size=1920x1480")
-            opts.add_argument("disable-dev-shm-usage")
-            driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.GOOGLE).install() ,options=opts )
-            driver.get("https://www.migros.com.tr/")
-            time.sleep(3)
-            try: 
-                popup = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CLASS_NAME, "mfp-close")))
-                popup.click()
-            except:
-                pass
-            
-            try: 
-                popup = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CLASS_NAME, "fa-w-10")))
-                popup.click()
-            except:
-                pass
-            search_bar = driver.find_element_by_xpath('//*[@id="product-search-combobox--trigger"]')
-            search_bar.clear()
-            search_bar.send_keys(fruit)
-            search_bar.send_keys(Keys.RETURN)
-            time.sleep(2)
-            try:
-                isim = driver.find_element_by_class_name('product-name').text
-                elements=WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, '.product-cards > .ng-star-inserted')))
-                old_fiyat = elements[0].find_element_by_css_selector(".price-old .amount").text
-                new_fiyat = elements[0].find_element_by_css_selector(".price-new .amount").text
-                fiyat = old_fiyat + " "+ new_fiyat
-                meyve_fiyat_migros['Fiyat'][isim] = fiyat
-                meyve_fiyat_migros['İndirimde mi?'][isim] = "evet"
-            except:
-                isim = driver.find_element_by_class_name('product-name').text
-                fiyat = driver.find_element_by_class_name('amount').text
-                meyve_fiyat_migros['Fiyat'][isim] = fiyat
-                meyve_fiyat_migros['İndirimde mi?'][isim] = "hayır"
-
-            driver.close()
-
-        #data_migros = pd.DataFrame(list(meyve_fiyat_migros.items()), columns=['Meyve Sebze', 'Fiyat'])
-
-        data_migros = pd.DataFrame(meyve_fiyat_migros).reset_index()
-        data_migros = data_migros.rename(columns={'index': 'Meyve Sebze'})
-
-        data_migros["Mağaza"] = "Migros"      
-
-        df_records_migros = data_migros.to_dict('records')
-
-        model_instances = [RakipFiyatTakip(
-            fruit_vegetable_name=record['Meyve Sebze'],
-            price=record['Fiyat'],
-            rakip=record['Mağaza'],
-            indirim=record['İndirimde mi?'],
-        ) for record in df_records_migros]
-
-        RakipFiyatTakip.objects.bulk_create(model_instances)
+        job = q.enqueue_call(
+        func=scrap_redis, args=(fruits,)
+        )
+        print(job.get_id())
 
         #data_migros = data_migros.to_html()
-
 
         rakipFiyatTakip = RakipFiyatTakip.objects.all()
 
