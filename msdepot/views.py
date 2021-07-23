@@ -234,10 +234,9 @@ def scrap_redis(fruits):
         #url = staticfiles_storage.path('chromedriver.exe')
         #driver = webdriver.Chrome(url, options=options)
         opts = webdriver.ChromeOptions()
-        opts.add_argument("--headless")
-        opts.add_argument("--window-size=1920x1480")
-        opts.add_argument("--no-sandbox")
-        opts.add_argument("--disable-dev-shm-usage")
+        opts.headless =True
+        opts.add_argument("window-size=1920x1480")
+        opts.add_argument("disable-dev-shm-usage")
         driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.GOOGLE).install() ,options=opts )
         driver.get("https://www.migros.com.tr/")
         time.sleep(3)
