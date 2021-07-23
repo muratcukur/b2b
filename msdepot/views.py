@@ -29,7 +29,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.utils import ChromeType
 
 # heroku redis queue
-from worker import conn
+from .worker import conn
 from redis import Redis
 from rq import Worker, Queue, Connection
 
