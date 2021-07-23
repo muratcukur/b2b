@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'mssupplier',
     'cart',
     'django_select2',
+
+    'redis',
 ]
 
 MIDDLEWARE = [
