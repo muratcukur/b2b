@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'cart',
     'django_select2',
 
-    'redis',
+
 ]
 
 MIDDLEWARE = [

@@ -299,7 +299,7 @@ def scrap(request):
 
     rakipFiyatTakip = RakipFiyatTakip.objects.all()
 
-    fruits = ["elma starking", "elma golden", "elma granny", "muz yerli", "kıvırcık", "erik angelica", "erik papaz", "patates", "soğan"]
+    fruits = ["elma starking", "elma golden", "muz yerli", "kıvırcık"]
 
     if request.method == "POST":
         # this import solves a rq bug which currently exists
@@ -308,9 +308,7 @@ def scrap(request):
 
         #q.enqueue(scrap_redis, obj=fruits)
 
-        job = q.enqueue_call(
-        func=scrap_redis, args=(fruits,)
-        )
+        job = q.enqueue(scrap_redis, fruits)
         print(job.get_id())
 
         #data_migros = data_migros.to_html()
