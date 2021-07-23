@@ -1,0 +1,2 @@
+selenium ile siteyi crawler ederken runtime 30 saniyeden falza sürüyor. Onun için redis ile queue yapmaya çalıştım. REDISTOGO_URL yi heroku config e ekledim. Ama view de ve worker.py de olan hatalardan dolayı crawler i çalıştırdığımda ( rakip fiyat - güncel fiyatları çek ) aşağıdaki hatayı alıyorum.
+django.core.exceptions.ImproperlyConfigured: Requested setting INSTALLED_APPS, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
