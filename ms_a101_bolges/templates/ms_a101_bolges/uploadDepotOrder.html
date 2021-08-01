@@ -16,10 +16,103 @@
     <button type="submit" class="ui positive button">Sipariş Ekle</button>
 
 </form>
+<br>
+
+
+<div id="uyari">
+    <br>
+ 
+
+</div>
+
+    <br>
+
+
+    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title" style="font-size: 20px;">Girdiğiniz Paletin Kasa Miktarı</h5>
+      <p class="card-text" id="id_kasa_hesap" style="font-size: 20px; text-align: center;"></p>
+    </div>
+  </div>
+
+<br>
+<br>
+
+<div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title" style="font-size: 20px;">Girdiğiniz Paletin Kilo Miktarı</h5>
+      <p class="card-text" id="id_kilo_hesap" style="font-size: 20px; text-align: center;"></p>
+    </div>
+  </div>
+
 
 </div>
 </div>
 </div>
+
+<script>
+    // palet sayısı girildiğinde kasa ve kilogram hesabı yapan kod
+
+
+    $('#id_fruit_vegetable_name').change(function(){
+
+            if ($(this).val() != "")
+    {
+
+    const source = document.getElementById('id_palet');
+    const id_kasa_hesap = document.getElementById('id_kasa_hesap');
+    const id_kilo_hesap = document.getElementById('id_kilo_hesap');
+    const uyari = document.getElementById('uyari');
+    uyari.innerHTML = ""
+
+    const kasaHesapDomates = function(e) {
+        id_kasa_hesap.innerHTML = e.target.value * 2;
+        id_kilo_hesap.innerHTML = e.target.value * 20;
+    }
+
+    const kasaHesapPatates = function(e) {
+        id_kasa_hesap.innerHTML = e.target.value * 3;
+        id_kilo_hesap.innerHTML = e.target.value * 30;
+    }
+
+    const kasaHesapDiger = function(e) {
+        id_kasa_hesap.innerHTML = e.target.value * 4;
+        id_kilo_hesap.innerHTML = e.target.value * 40;
+    }
+
+    if($('#id_fruit_vegetable_name').val() == 1) {
+
+        source.addEventListener('input', kasaHesapDomates);
+        source.addEventListener('propertychange', kasaHesapDomates); // for IE8
+
+    }
+
+    else if ($('#id_fruit_vegetable_name').val() == 2) {
+
+source.addEventListener('input', kasaHesapPatates);
+source.addEventListener('propertychange', kasaHesapPatates); // for IE8
+
+}
+
+else {
+    source.addEventListener('input', kasaHesapDiger);
+source.addEventListener('propertychange', kasaHesapDiger); // for IE8
+}
+
+}
+
+else {
+    id_kasa_hesap.innerHTML = 0;
+    id_kilo_hesap.innerHTML = 0;
+}
+
+
+
+})
+    
+
+
+</script>
 
 <script>
     // Get next week last day.
@@ -38,6 +131,10 @@
 </script>
 
 <script>
+
+
+ if ("{{request.user.username}}" == "serik")  {
+
     $(function(){
         var dtToday = new Date();
         var next_week_last_day = dates(new Date())
@@ -70,6 +167,46 @@
         $('#id_teslim_tarihi').attr('min', minDate);
         $('#id_teslim_tarihi').attr('max', maxDate);      
     });
+
+
+}
+
+else {
+    $(function(){
+        var dtToday = new Date();
+        var next_week_last_day = dates(new Date())
+        
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate();
+        var three_date = dtToday.getDate()+5;
+        var seven_date = dtToday.getDate()+9;
+        var year = dtToday.getFullYear();
+
+        var monthNextWeek = next_week_last_day.getMonth() + 1 ;
+        var dayNextWeek = next_week_last_day.getDate();
+        var yearNextWeek = next_week_last_day.getFullYear();
+
+        if(month < 10)
+            month = '0' + month.toString();
+        if(seven_date < 10)
+            seven_date = '0' + seven_date.toString();
+        if(three_date < 10)
+            three_date = '0' + three_date.toString();
+        
+        if (monthNextWeek < 10)
+            monthNextWeek = '0' + monthNextWeek.toString();
+        if (dayNextWeek < 10)
+            dayNextWeek = '0' + dayNextWeek.toString();
+
+        var minDate = year + '-' + month + '-' + three_date;
+        var maxDate = yearNextWeek + '-' + monthNextWeek + '-' + dayNextWeek;
+
+        $('#id_teslim_tarihi').attr('min', minDate);
+        $('#id_teslim_tarihi').attr('max', maxDate);      
+    });
+
+}
+
 </script>
 
 

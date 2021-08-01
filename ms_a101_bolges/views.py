@@ -7,6 +7,8 @@ from mssupplier.models import SupplierStock
 from msdepot.forms import SearchFruitVegetableForm
 from django.http import HttpResponse
 import json
+from django.db import connection
+import pandas as pd
 
 # Create your views here.
 
@@ -47,6 +49,99 @@ def depotOrder_view(request):
     return render(request, 'ms_a101_bolges/viewDepotOrder.html',context)
 
 @login_required
+def urunBazliDepotOrder_view(request):
+    tarih = None
+    cursor = connection.cursor()
+
+    query = """  select ms.fruit_vegetable_name, sum(msorder.palet) as toplam from ms_a101_bolges_depotorder msorder 
+        left join msdepot_meyvesebzeyeni ms on 
+        msorder.fruit_vegetable_name_id = ms.id
+        group by msorder.fruit_vegetable_name_id  """
+
+    cursor.execute(query)
+    result = cursor.fetchall()
+    columns = cursor.description
+    cursor.close()
+    column = []
+    for col in columns:
+        column.append(col[0])
+
+    urun_bazli_depot_order = pd.DataFrame(result,columns=column)
+
+    if request.method == "POST":
+        cursor = connection.cursor()
+        tarih = request.POST.get("teslim_tarihi", "")
+        tarih = str(tarih)
+
+        query2 = """  select ms.fruit_vegetable_name, sum(msorder.palet) as toplam from ms_a101_bolges_depotorder msorder 
+        left join msdepot_meyvesebzeyeni ms on 
+        msorder.fruit_vegetable_name_id = ms.id where DATE(msorder.teslim_tarihi) = %s
+        group by msorder.fruit_vegetable_name_id """
+
+        data_tuple=(tarih,)
+        cursor.execute(query2,data_tuple)
+        result = cursor.fetchall()
+        columns = cursor.description
+        cursor.close()
+        column = []
+        for col in columns:
+            column.append(col[0])
+
+        urun_bazli_depot_order = pd.DataFrame(result,columns=column)  
+
+    context = {
+    'urun_bazli_depot_order' : urun_bazli_depot_order,
+    'tarih' : tarih,
+    }
+
+    return render(request, 'ms_a101_bolges/viewUrunBazliDepotOrder.html',context)
+
+
+@login_required
+def bolgeBazliDepotOrder_view(request):
+
+    cursor = connection.cursor()
+
+    query = """  select depot_name, sum(palet) as toplam from ms_a101_bolges_depotorder  
+            group by depot_name  """
+
+    cursor.execute(query)
+    result = cursor.fetchall()
+    columns = cursor.description
+    cursor.close()
+    column = []
+    for col in columns:
+        column.append(col[0])
+
+    bolge_bazli_depot_order = pd.DataFrame(result,columns=column)
+
+    if request.method == "POST":
+        cursor = connection.cursor()
+        tarih = request.POST.get("teslim_tarihi", "")
+        tarih = str(tarih)
+
+        query2 = """  select depot_name, sum(palet) as toplam from ms_a101_bolges_depotorder  
+            where DATE(teslim_tarihi) = %s
+            group by depot_name """
+
+        data_tuple=(tarih,)
+        cursor.execute(query2,data_tuple)
+        result = cursor.fetchall()
+        columns = cursor.description
+        cursor.close()
+        column = []
+        for col in columns:
+            column.append(col[0])
+
+        bolge_bazli_depot_order = pd.DataFrame(result,columns=column)  
+
+    context = {
+    'bolge_bazli_depot_order' : bolge_bazli_depot_order,
+    }
+
+    return render(request, 'ms_a101_bolges/viewBolgeBazliDepotOrder.html',context)
+
+@login_required
 def depotOrder_view_depot_based(request):
     success_message = None
     error_message = None
@@ -82,6 +177,7 @@ def stock_view(request):
             form = LocalSupplierOrderForm(request.POST, request.FILES)
             if form.is_valid():
                 obj = form.save(commit = False)
+                obj.destination_bolge = request.user
                 obj.supplier = request.POST.get('supplier_name')
                 obj.product = request.POST.get('fruit_vegetable')
                 obj.save()
@@ -97,7 +193,7 @@ def stock_view(request):
             form_search = SearchFruitVegetableForm(request.POST, request.FILES)
             if form_search.is_valid():
                 fruit_vegetable = request.POST['fruit_vegetable_name']
-                search_stocks = SupplierStock.objects.all().filter(fruit_vegetable_name = fruit_vegetable)
+                search_stocks = SupplierStock.objects.filter(fruit_vegetable_name = fruit_vegetable).first()
                 form_search = SearchFruitVegetableForm()
         else:
             form_search = SearchFruitVegetableForm()

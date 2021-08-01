@@ -33,6 +33,27 @@
         <button type="submit" name="order_sub"  class="ui positive button" style="margin-top: 10px; float: right;">Sipariş Ekle</button>
     </form>
   
+    <br>
+
+
+    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title" style="font-size: 20px;">Girdiğiniz Paletin Kasa Miktarı</h5>
+      <p class="card-text" id="id_kasa_hesap" style="font-size: 20px; text-align: center;"></p>
+    </div>
+  </div>
+
+<br>
+<br>
+
+<div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title" style="font-size: 20px;">Girdiğiniz Paletin Kilo Miktarı</h5>
+      <p class="card-text" id="id_kilo_hesap" style="font-size: 20px; text-align: center;"></p>
+    </div>
+  </div>
+
+
   </div>
 <!-- 
 
@@ -101,10 +122,10 @@
         </tr>
     </thead>
     <tbody>
-        {% for stock in search_stocks%}
+
         <tr>
-            <td class="supplier_name">{{stock.supplier_name}}</td>
-            <td class="fruit_vegetable">{{stock.fruit_vegetable_name}}</td>
+            <td class="supplier_name">{{search_stocks.supplier_name}}</td>
+            <td class="fruit_vegetable">{{search_stocks.fruit_vegetable_name}}</td>
           <!--  <td>{{stock.current_stock}}</td>
             <td>{{stock.current_unit}}</td>
             <td>{{stock.yearly_sales_capacity}}</td>
@@ -113,7 +134,7 @@
             <td><button type="button" class="ui green button siparisVer">Sipariş Ver</button></td>
           <!--  <td><a href=""><i class="tty icon" style="margin-left:30px;"></i></a></td>      -->      
         </tr>
-        {% endfor %}
+     
     </tbody>
 </table>
 <script>
@@ -219,6 +240,28 @@
       });
 
     });
+
+</script>
+
+<script>
+    // palet sayısı girildiğinde kasa ve kilogram hesabı yapan kod
+
+    const source = document.getElementById('id_quantity');
+    const id_kasa_hesap = document.getElementById('id_kasa_hesap');
+    const id_kilo_hesap = document.getElementById('id_kilo_hesap');
+
+    const kasaHesapDiger = function(e) {
+        id_kasa_hesap.innerHTML = e.target.value * 4;
+        id_kilo_hesap.innerHTML = e.target.value * 40;
+    }
+
+
+    source.addEventListener('input', kasaHesapDiger);
+    source.addEventListener('propertychange', kasaHesapDiger); // for IE8
+
+
+    
+
 
 </script>
 

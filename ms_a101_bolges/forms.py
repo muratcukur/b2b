@@ -19,15 +19,12 @@ class DepotOrderForm(forms.ModelForm):
 class LocalSupplierOrderForm(forms.ModelForm):
     class Meta:
         model = LocalSupplierOrder
-        fields = ["quantity", "unit", "price","destination_bolge","termin","slot","approved"]
+        fields = ["quantity","termin","slot","approved"]
 
         widgets = {'termin': forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'form-control', 'placeholder':'Tarih Seçiniz', 'type':'date'})}
 
         labels = {
-            "quantity" : "Miktar",
-            "unit" : "Birim",
-            "price" : "Birim Fiyatı",
-            "destination_bolge" : "Gideceği Bölge Adı",
+            "quantity" : "Palet",
             "termin" : "İstenen Tarih",
             "slot":"Saat Aralığı",
             "total_price":"Toplam Fiyat",

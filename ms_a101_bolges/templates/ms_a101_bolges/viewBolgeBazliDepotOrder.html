@@ -1,0 +1,57 @@
+
+{% extends 'baseDepot.html' %}
+
+{% block title %}view bölge bazlı depot order{% endblock title %}
+
+{% block content %}
+
+<br>
+<br>
+<br>
+
+<form action="" method="POST" class="ui form">
+    {% csrf_token %}
+    <tr><th><label for="id_teslim_tarihi">Tarih:</label></th>
+        <td><input type="date" name="teslim_tarihi" class="form-control" id="id_teslim_tarihi" style="width: 200px;"></td>
+    </tr>
+<button type="submit" class="ui positive button">Tarih Filtrele</button>
+
+</form>
+
+<br>
+<br>
+<br>
+
+<table class="ui celled table" id="depotOrder" style="width:100%">
+    <thead>
+        <tr>
+            <th>Bölge</th>
+            <th>Palet</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in bolge_bazli_depot_order.itertuples%}
+        <tr>
+            <td>{{order.depot_name}}</td>
+            <td>{{order.toplam}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div>
+
+
+<script>
+
+    var table = $('#depotOrder').DataTable( {
+        lengthChange: false,
+        buttons: [ 'excel', 'pdf', 'colvis' ]
+    } );
+ 
+    table.buttons().container()
+        .appendTo( $('div.eight.column:eq(0)', table.table().container()) );
+
+</script>
+
+{% endblock content %}

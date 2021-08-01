@@ -22,11 +22,12 @@ class MeyveSebzeYeni(models.Model):
         ('Adet', 'Adet'),
         ('Kilo', 'Kilo'),
     )
-    fruit_vegetable_name = models.CharField(max_length=50)
+    fruit_vegetable_kod_yeni = models.IntegerField(default = None, blank = True, null = True)
+    fruit_vegetable_name_yeni = models.CharField(max_length=50)
     unit = models.CharField(max_length=10, choices=UNIT_CHOICES)
 
     def __str__(self):
-        return str(self.fruit_vegetable_name)
+        return str(self.fruit_vegetable_kod_yeni)
 
 class Ihale(models.Model):
 
@@ -71,7 +72,8 @@ class IhaleYeni(models.Model):
         ("euro", "euro"),
         ("dusseldorf", "dusseldorf"),
     )
-    fruit_vegetable_name = models.ForeignKey(MeyveSebzeYeni, on_delete=models.CASCADE)
+    fruit_vegetable_kod = models.ForeignKey(MeyveSebzeYeni, on_delete=models.CASCADE)
+    fruit_vegetable_name = models.CharField(max_length=30)
     quantity = models.FloatField()
     kasa_ebati = models.CharField(max_length=30, choices = EBAT_CHOICES)
     paletteki_kasa_sayisi = models.IntegerField()
@@ -87,7 +89,7 @@ class IhaleYeni(models.Model):
     hedef_fiyat = models.FloatField(null=True, blank=True, default=None)
     
     def save(self, *args, **kwargs):
-        self.unit = MeyveSebzeYeni.objects.filter(fruit_vegetable_name=self.fruit_vegetable_name).values("unit")
+        self.unit = MeyveSebzeYeni.objects.filter(fruit_vegetable_name_yeni=self.fruit_vegetable_name).values("unit")
         super(IhaleYeni, self).save(*args, **kwargs)
 
     def __str__(self):

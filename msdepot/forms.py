@@ -4,20 +4,23 @@ from django.contrib.auth.models import User
 from django_select2.forms import Select2MultipleWidget
 
 class IhaleForm(forms.ModelForm):
-	class Meta:
-		model = IhaleYeni
-		fields = ["fruit_vegetable_name", "quantity", "kasa_ebati","paletteki_kasa_sayisi","palet_olcusu","teslim_tarihi",
+
+    class Meta:
+        model = IhaleYeni
+
+        fields = ["fruit_vegetable_kod", "fruit_vegetable_name", "quantity", "kasa_ebati","paletteki_kasa_sayisi","palet_olcusu","teslim_tarihi",
         "ihale_end_date","spekt_aciklama","sevk_kosullari","koli_kosullari", "hedef_fiyat"]
 
-		widgets = {'ihale_end_date': forms.DateInput(format=('%Y-%m-%d %h-%m'), attrs={'class':'form-control', 'placeholder':'Tarih Seçiniz', 'type':'date'}),
+        widgets = {'ihale_end_date': forms.DateInput(format=('%Y-%m-%d %h-%m'), attrs={'class':'form-control', 'placeholder':'Tarih Seçiniz', 'type':'date'}),
                     'teslim_tarihi': forms.DateInput(format=('%Y-%m-%d %h-%m'), attrs={'class':'form-control', 'placeholder':'Tarih Seçiniz', 'type':'date'}),
                     'spekt_aciklama': forms.Textarea(attrs={'cols': 80, 'rows': 5}),
                     'sevk_kosullari': forms.Textarea(attrs={'cols': 80, 'rows': 3}),
                     'koli_kosullari': forms.Textarea(attrs={'cols': 80, 'rows': 3}),
                     }
 
-		labels = {
-            "fruit_vegetable_name" : "Meyve Sebze" ,
+        labels = {
+            "fruit_vegetable_kod" : "Meyve Sebze Kodu" ,
+            "fruit_vegetable_name" : "Meyve Sebze Adı" ,
             "quantity" : "Miktar",
             "teslim_tarihi" : "Teslim Tarihi",
             "ihale_end_date" : "İhale Bitiş Tarihi",
@@ -105,7 +108,7 @@ class IhaleIkinciTurForm(forms.ModelForm):
 
 class SearchFruitVegetableForm(forms.Form):
 
-    fruit_vegetable_name = forms.ModelChoiceField(queryset=MeyveSebzeYeni.objects.order_by('fruit_vegetable_name').all(), label='Meyve Sebze Adı')
+    fruit_vegetable_name = forms.ModelChoiceField(queryset=MeyveSebzeYeni.objects.order_by('fruit_vegetable_name_yeni').all(), label='Meyve Sebze Adı')
 
 
 class TedarikciAnketForm(forms.ModelForm):
