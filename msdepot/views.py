@@ -199,7 +199,7 @@ def dashboard_view(request):
     #graph_ihale_kazananlar = ihale_kazananlar(ihale_kazanan)
 
     #MEYVE SEBZEYİ KAÇ FİRMANIN SATTIĞINI GÖSTEREN GRAFİK
-    query2 = """  WITH data as (select fruit_vegetable_name_id, count(*) as toplam from mssupplier_supplierstock GROUP by fruit_vegetable_name_id) SELECT b.fruit_vegetable_name, a.toplam from data as a left join msdepot_meyvesebzeyeni as b on a.fruit_vegetable_name_id = b.id """
+    query2 = """  WITH data as (select fruit_vegetable_name_id, count(*) as toplam from mssupplier_supplierstock GROUP by fruit_vegetable_name_id) SELECT b.fruit_vegetable_name_yeni, a.toplam from data as a left join msdepot_meyvesebzeyeni as b on a.fruit_vegetable_name_id = b.id """
     cursor.execute(query2)
     result = cursor.fetchall()
     columns = cursor.description

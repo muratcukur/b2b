@@ -22,7 +22,7 @@ class MeyveSebzeYeni(models.Model):
         ('Adet', 'Adet'),
         ('Kilo', 'Kilo'),
     )
-    fruit_vegetable_kod_yeni = models.IntegerField(default = None, blank = True, null = True)
+    fruit_vegetable_kod_yeni = models.IntegerField()
     fruit_vegetable_name_yeni = models.CharField(max_length=50)
     unit = models.CharField(max_length=10, choices=UNIT_CHOICES)
 

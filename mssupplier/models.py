@@ -10,7 +10,7 @@ class SupplierStock(models.Model):
         ('Kilo', 'Kilo'),
     )
     supplier_name = models.ForeignKey(User, on_delete=models.CASCADE)
-    fruit_vegetable_name = models.ForeignKey(MeyveSebzeYeni, on_delete=models.CASCADE)
+    fruit_vegetable_name = models.ForeignKey(MeyveSebzeYeni,on_delete=models.CASCADE)
     current_stock = models.FloatField(null=True, blank = True)
     current_unit = models.CharField(max_length=10, choices=UNIT_CHOICES, null=True, blank = True)
     yearly_sales_capacity = models.FloatField(null=True, blank = True)

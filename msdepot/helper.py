@@ -45,7 +45,7 @@ def ihale_kazananlar(data):
 
 def ms_firma_sayilari(data):
     fig = go.Figure()
-    bar = go.Bar(x =data["fruit_vegetable_name"], y=data["toplam"])
+    bar = go.Bar(x =data["fruit_vegetable_name_yeni"], y=data["toplam"])
 
     fig.update_layout(title_text='MS Tedarikçi Sayıları', xaxis={'categoryorder':'total descending'})
 

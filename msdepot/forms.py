@@ -108,7 +108,7 @@ class IhaleIkinciTurForm(forms.ModelForm):
 
 class SearchFruitVegetableForm(forms.Form):
 
-    fruit_vegetable_name = forms.ModelChoiceField(queryset=MeyveSebzeYeni.objects.order_by('fruit_vegetable_name_yeni').all(), label='Meyve Sebze Adı')
+    fruit_vegetable_name = forms.ModelChoiceField(queryset=MeyveSebzeYeni.objects.order_by('fruit_vegetable_kod_yeni').all(), label='Meyve Sebze Kodu')
 
 
 class TedarikciAnketForm(forms.ModelForm):
