@@ -16,7 +16,7 @@ class DepotOrder(models.Model):
     user_name = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def save(self, *args, **kwargs):
-        self.unit = MeyveSebzeYeni.objects.filter(fruit_vegetable_name=self.fruit_vegetable_name).values("unit")
+        self.unit = MeyveSebzeYeni.objects.filter(fruit_vegetable_name_yeni = self.fruit_vegetable_name).values("unit")
         super(DepotOrder, self).save(*args, **kwargs)
 
     def __str__(self):
