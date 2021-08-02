@@ -148,7 +148,7 @@ def depotOrder_view_depot_based(request):
 
     depotOrder = Order.objects.filter(destination_bolge = request.user.username)
 
-    depotBasedOrder = LocalSupplierOrder.objects.filter(destination_bolge = request.user.username)
+    depotBasedOrder = LocalSupplierOrder.objects.filter(destination_bolge = request.user)
 
     bölge = request.user.username
 
