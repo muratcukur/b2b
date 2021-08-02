@@ -53,7 +53,7 @@ def urunBazliDepotOrder_view(request):
     tarih = None
     cursor = connection.cursor()
 
-    query = """  select ms.fruit_vegetable_name, sum(msorder.palet) as toplam from ms_a101_bolges_depotorder msorder 
+    query = """  select ms.fruit_vegetable_name_yeni, sum(msorder.palet) as toplam from ms_a101_bolges_depotorder msorder 
         left join msdepot_meyvesebzeyeni ms on 
         msorder.fruit_vegetable_name_id = ms.id
         group by msorder.fruit_vegetable_name_id  """
@@ -73,7 +73,7 @@ def urunBazliDepotOrder_view(request):
         tarih = request.POST.get("teslim_tarihi", "")
         tarih = str(tarih)
 
-        query2 = """  select ms.fruit_vegetable_name, sum(msorder.palet) as toplam from ms_a101_bolges_depotorder msorder 
+        query2 = """  select ms.fruit_vegetable_name_yeni, sum(msorder.palet) as toplam from ms_a101_bolges_depotorder msorder 
         left join msdepot_meyvesebzeyeni ms on 
         msorder.fruit_vegetable_name_id = ms.id where DATE(msorder.teslim_tarihi) = %s
         group by msorder.fruit_vegetable_name_id """
