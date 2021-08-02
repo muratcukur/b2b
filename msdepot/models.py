@@ -72,6 +72,12 @@ class IhaleYeni(models.Model):
         ("euro", "euro"),
         ("dusseldorf", "dusseldorf"),
     )
+
+    IHALE_TESLIM_YERI = (
+        ("A101 Bölge Depoları", "A101 Bölge Depoları"),
+        ("A101 Antalya Meyve Sebze Deposu", "A101 Antalya Meyve Sebze Deposu"),
+    )
+
     fruit_vegetable_kod = models.ForeignKey(MeyveSebzeYeni, on_delete=models.CASCADE)
     fruit_vegetable_name = models.CharField(max_length=30)
     quantity = models.FloatField()
@@ -87,6 +93,7 @@ class IhaleYeni(models.Model):
     sevk_kosullari = models.CharField(max_length=50)
     koli_kosullari = models.CharField(max_length=50)
     hedef_fiyat = models.FloatField(null=True, blank=True, default=None)
+    teslim_yeri = models.CharField(max_length=50, choices=IHALE_TESLIM_YERI, null=True, blank=True, default=None)
     
     def save(self, *args, **kwargs):
         self.unit = MeyveSebzeYeni.objects.filter(fruit_vegetable_name_yeni=self.fruit_vegetable_name).values("unit")

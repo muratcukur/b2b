@@ -23,6 +23,9 @@
             <th>Spekt Açıklama</th>
             <th>Sevk Koşulları</th>
             <th>Koli Koşulları</th>
+            <th><button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="a101.com.tr üzerinden bölge depolarına ulaşabilirsiniz">
+                Teslim Yeri
+              </button></th>
             <th>Hedef Birim Fiyat</th>
             <th>Teslim Tarihi</th>
             <th>İhale Kapanış Tarihi</th>
@@ -43,6 +46,7 @@
             <td>{{ihale.spekt_aciklama}}</td>
             <td>{{ihale.sevk_kosullari}}</td>
             <td>{{ihale.koli_kosullari}}</td>
+            <td>{{ihale.teslim_yeri}}</td>
             <td>{{ihale.hedef_fiyat}}</td>
             <td>{{ihale.teslim_tarihi|date:"d-m-Y"}}</td>
             <td>{{ihale.ihale_end_date|date:"d-m-Y"}}</td>

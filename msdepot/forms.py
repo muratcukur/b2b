@@ -9,7 +9,7 @@ class IhaleForm(forms.ModelForm):
         model = IhaleYeni
 
         fields = ["fruit_vegetable_kod", "fruit_vegetable_name", "quantity", "kasa_ebati","paletteki_kasa_sayisi","palet_olcusu","teslim_tarihi",
-        "ihale_end_date","spekt_aciklama","sevk_kosullari","koli_kosullari", "hedef_fiyat"]
+        "ihale_end_date","spekt_aciklama","sevk_kosullari","koli_kosullari","teslim_yeri" , "hedef_fiyat"]
 
         widgets = {'ihale_end_date': forms.DateInput(format=('%Y-%m-%d %h-%m'), attrs={'class':'form-control', 'placeholder':'Tarih Seçiniz', 'type':'date'}),
                     'teslim_tarihi': forms.DateInput(format=('%Y-%m-%d %h-%m'), attrs={'class':'form-control', 'placeholder':'Tarih Seçiniz', 'type':'date'}),
@@ -21,14 +21,15 @@ class IhaleForm(forms.ModelForm):
         labels = {
             "fruit_vegetable_kod" : "Meyve Sebze Kodu" ,
             "fruit_vegetable_name" : "Meyve Sebze Adı" ,
-            "quantity" : "Miktar",
+            "quantity" : "Toplam Kasa Sipariş Sayısı",
             "teslim_tarihi" : "Teslim Tarihi",
             "ihale_end_date" : "İhale Bitiş Tarihi",
             "kasa_ebati" : "Kasa Ebatı",
-            "paletteki_kasa_sayisi" : "Paletteki Kasa Sayısı",
+            "paletteki_kasa_sayisi" : "1 Palette Olması Gereken Kasa Sayısı",
             "palet_olcusu" : "Palet Ölçüsü",
             "spekt_aciklama" : "Spekt Açıklama",
             "koli_kosullari" : "Koli Koşulları",
+            "teslim_yeri" : "Teslim Yeri" ,
             "hedef_fiyat" : "Hedef Birim Fiyat",
 
         }
