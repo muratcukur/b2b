@@ -56,7 +56,7 @@ def urunBazliDepotOrder_view(request):
     query = """  select ms.fruit_vegetable_name_yeni, sum(msorder.palet) as toplam from ms_a101_bolges_depotorder msorder 
         left join msdepot_meyvesebzeyeni ms on 
         msorder.fruit_vegetable_name_id = ms.id
-        group by msorder.fruit_vegetable_name_id  """
+        group by ms.fruit_vegetable_name_yeni  """
 
     cursor.execute(query)
     result = cursor.fetchall()
@@ -76,7 +76,7 @@ def urunBazliDepotOrder_view(request):
         query2 = """  select ms.fruit_vegetable_name_yeni, sum(msorder.palet) as toplam from ms_a101_bolges_depotorder msorder 
         left join msdepot_meyvesebzeyeni ms on 
         msorder.fruit_vegetable_name_id = ms.id where DATE(msorder.teslim_tarihi) = %s
-        group by msorder.fruit_vegetable_name_id """
+        group by ms.fruit_vegetable_name_yeni """
 
         data_tuple=(tarih,)
         cursor.execute(query2,data_tuple)
