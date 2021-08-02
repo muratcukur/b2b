@@ -69,7 +69,7 @@ def ihale_view(request):
     else:
         supplier_fruit_vegetable = SupplierStock.objects.filter(supplier_name = request.user).order_by("fruit_vegetable_name").values('fruit_vegetable_name').distinct()
 
-        ihales = IhaleYeni.objects.filter(fruit_vegetable_name__in = supplier_fruit_vegetable).all()
+        ihales = IhaleYeni.objects.filter(fruit_vegetable_kod__in = supplier_fruit_vegetable).all()
     
     context = {
     'ihales' : ihales,
