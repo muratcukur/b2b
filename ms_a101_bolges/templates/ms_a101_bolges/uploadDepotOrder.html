@@ -4,11 +4,23 @@
 
 {% block content %}
 
+<br>
+<br>
+
+<div class="ui success message">
+    <div class="header" style="text-align: center;">
+      MEYVE SEBZE DEPOSUNA SİPARİŞ EKLE
+    </div>
+  </div>
+<br>
+<br>
+
+
 
 <div class="block-center">
 	<div class="ui centered grid container">
 	<div class="ten wide column">
-<form action="" method="POST"  class="ui form topmargin">
+<form action="" method="POST"  class="ui form">
     {% csrf_token %}
     <table>
     {{form.as_table}}
