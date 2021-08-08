@@ -25,7 +25,8 @@
     <thead>
         <tr>
             <th>Depo Adı</th>
-            <th>Meyve Sebze</th>
+            <th>Meyve Sebze Kodu</th>
+            <th>Meyve Sebze Adı</th>
             <th>Palet</th>
             <th>Birim</th>
             <th>Teslim Tarihi</th>
@@ -37,6 +38,7 @@
         <tr>
             <td>{{order.depot_name}}</td>
             <td>{{order.fruit_vegetable_name}}</td>
+            <td>{{order.fruit_vegetable_name_name}}</td>
             <td>{{order.palet}}</td>
             <td>{{order.unit}}</td>
             <td>{{order.teslim_tarihi|date:"Y-m-d"}}</td>

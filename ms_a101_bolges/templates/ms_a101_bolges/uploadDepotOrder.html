@@ -222,5 +222,49 @@ else {
 </script>
 
 
+<script>
+    document.getElementById("id_fruit_vegetable_name_name").setAttribute("readonly", "true");
+    
+    $('#id_fruit_vegetable_name').on('change', function() {
+        var selectedText = $("#id_fruit_vegetable_name option:selected").html();
+    
+        if (selectedText == "1001") {
+    
+            $("#id_fruit_vegetable_name_name").val("DOMATES SALKIM");
+    
+        }
+    
+        else if (selectedText == "1002") {
+            $("#id_fruit_vegetable_name_name").val("SOĞAN");
+        }
+       else if (selectedText == "1003") {
+        $("#id_fruit_vegetable_name_name").val("PATATES");
+        }
+        else if (selectedText == "1004") {
+            $("#id_fruit_vegetable_name_name").val("KAYISI");
+        }
+        else if (selectedText == "1005") {
+            $("#id_fruit_vegetable_name_name").val("KARPUZ");
+        }
+    
+        else if (selectedText == "1006") {
+            $("#id_fruit_vegetable_name_name").val("MUZ İTHAL");
+        }
+        else if (selectedText == "1007") {
+            $("#id_fruit_vegetable_name_name").val("MUZ YERLİ");
+        }
+        else if (selectedText == "1008") {
+            $("#id_fruit_vegetable_name_name").val("ÇİLEK");
+        }
+        else if (selectedText == "1009") {
+            $("#id_fruit_vegetable_name_name").val("PATATES");
+        }
+        else {
+            $("#id_fruit_vegetable_name_name").val("DOMATES");
+        }
+    
+    });
+    </script>
+
 
 {% endblock content %}

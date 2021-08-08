@@ -8,6 +8,7 @@ class DepotOrder(models.Model):
 
     depot_name = models.CharField(max_length = 20)
     fruit_vegetable_name = models.ForeignKey(MeyveSebzeYeni, on_delete=models.CASCADE)
+    fruit_vegetable_name_name = models.CharField(max_length = 50, null = True)
     #fruit_vegetable_name = models.CharField(max_length = 20)
     palet = models.FloatField()
     unit = models.CharField(max_length = 20, null = True)

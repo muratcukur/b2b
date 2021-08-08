@@ -4,13 +4,14 @@ from .models import DepotOrder, LocalSupplierOrder
 class DepotOrderForm(forms.ModelForm):
     class Meta:
         model = DepotOrder
-        fields = ["fruit_vegetable_name", "palet", "teslim_tarihi"]
+        fields = ["fruit_vegetable_name","fruit_vegetable_name_name", "palet", "teslim_tarihi"]
   
         widgets = {'teslim_tarihi': forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'form-control', 'placeholder':'Tarih Seçiniz', 'type':'date'})}
 
         labels = {
             #"depot_name": "Depo Seçiniz" ,
-            "fruit_vegetable_name" : "Meyve Sebze" ,
+            "fruit_vegetable_name" : "Meyve Sebze Kodu" ,
+            "fruit_vegetable_name_name" : "Meyve Sebze Adı" ,
             "palet" : "Palet",
             #"unit" : "Birim",
             "teslim_tarihi" : "Teslim Tarihi",
